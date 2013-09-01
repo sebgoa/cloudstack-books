@@ -1,0 +1,2 @@
+% The Little CloudStack Book
+% Sebastien Goasguen
