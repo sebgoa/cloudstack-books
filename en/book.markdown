@@ -2,10 +2,10 @@ Clients and Shells
 ==================
 
 Clients and Shells are critical to the ease of use of any API, even more
-so Cloud APIs. In this chapter we present the basis of the PRODUCT API.
+so Cloud APIs. In this chapter we present the basis of the CloudStack API.
 We illustrate how to sign requests for the sake of completeness and
 because it is a very nice exercise for beginners. We then introduce
-CloudMonkey the PRODUCT CLI and shell which boasts a 100% coverage of
+CloudMonkey the CloudStack CLI and shell which boasts a 100% coverage of
 the API. While jclouds is a java library, it can also be used as a cli
 or interactive shell, we present jclouds-cli to contrast it to
 CloudMonkey and introduce jclouds. Apache libcloud is a Python based API
@@ -16,12 +16,12 @@ receiving lots of attention recently for its clean functional
 programming style, clojure is the basis of Pallet which we will talk
 about in the next chapter. Clostack serves as a teaser for Clojure.
 Finally we cover Boto, the well-known Python Amazon Web Service
-interface, and show how it can be used with a PRODUCT cloud.
+interface, and show how it can be used with a CloudStack cloud.
 
-The PRODUCT API
+The CloudStack API
 ===============
 
-All functionalities of the PRODUCT data center orchestrator are exposed
+All functionalities of the CloudStack data center orchestrator are exposed
 via an API server. Github currently has over fifteen clients for this
 API, in various languages. In this section we introduce this API and the
 signing mechanism. The follow on sections will introduce clients that
@@ -35,12 +35,12 @@ The API is *http* based, meaning that calls to the API server are made
 using the http protocol, the reponses are either in XML or JSON format.
 The request is made out of a set of key value pairs that correspond to
 input parameters of each call. The key/value pairs are passed within a
-url string. All calls used the http GET method. As such, the PRODUCT API
+url string. All calls used the http GET method. As such, the CloudStack API
 is not a RESTfull API and more a Query API or RESTlike.
 
 In isolated testing, one may wish to use the so-called integration port
 (e.g 8096 by default), this port makes the API directly accessible
-without signing requests. In production mode, the integration port
+without signing requests. In CloudStackion mode, the integration port
 should never be used and certainly not open to the public internet.
 
 How to sign an API call with Python
@@ -134,17 +134,17 @@ users in *user*
       
         
 
-To epxlore further the PRODUCT API, use CloudMonkey and/or read the API
+To epxlore further the CloudStack API, use CloudMonkey and/or read the API
 [documentation](http://cloudstack.apache.org/apidocumentation), which
 contains the entire parameters list for each API call.
 
 CloudMonkey
 ===========
 
-CloudMonkey is the PRODUCT Command Line Interface (CLI). It is written
+CloudMonkey is the CloudStack Command Line Interface (CLI). It is written
 in Python. CloudMonkey can be used both as an interactive shell and as a
-command line tool which simplifies PRODUCT configuration and management.
-It can be used with PRODUCT CloudStack 4.0-incubating and above
+command line tool which simplifies CloudStack configuration and management.
+It can be used with CloudStack CloudStack 4.0-incubating and above
 
 > **Warning**
 >
@@ -160,12 +160,12 @@ CloudMonkey is dependent on *readline, pygments, prettytable*, when
 installing from source you will need to resolve those dependencies.
 Using the cheese shop, the dependencies will be automatically installed.
 
-There are three ways to get CloudMonkey. Via the official PRODUCT source
+There are three ways to get CloudMonkey. Via the official CloudStack source
 releases or via a community maintained distribution at [the cheese
 shop](http://pypi.python.org/pypi/cloudmonkey/). Developers can also get
 it directly from the git repository in *tools/cli/*.
 
--   Via the official Apache PRODUCT releases as well as the git
+-   Via the official Apache CloudStack releases as well as the git
     repository.
 
             
@@ -217,7 +217,7 @@ appropriate file paths in \~/.cloudmonkey/config
         
 
 The values can also be set at the CloudMonkey prompt. The API and secret
-keys are obtained via the PRODUCT UI or via a raw api call.
+keys are obtained via the CloudStack UI or via a raw api call.
 
 
     $ cloudmonkey
@@ -240,8 +240,8 @@ API Discovery
 
 > **Note**
 >
-> In PRODUCT 4.0.\* releases, the list of api calls available will be
-> pre-cached, while starting with PRODUCT 4.1 releases and above an API
+> In CloudStack 4.0.\* releases, the list of api calls available will be
+> pre-cached, while starting with CloudStack 4.1 releases and above an API
 > discovery service is enabled. CloudMonkey will discover automatically
 > the api calls available on the management server. The sync command in
 > CloudMonkey pulls a list of apis which are accessible to your user
@@ -346,7 +346,7 @@ Note the required arguments necessary for the calls.
 > **Note**
 >
 > To find out the required parameters value, using a debugger console on
-> the PRODUCT UI might be very useful. For instance using Firebug on
+> the CloudStack UI might be very useful. For instance using Firebug on
 > Firefox, you can navigate the UI and check the parameters values for
 > each call you are making as you navigate the UI.
 
@@ -436,7 +436,7 @@ The instance would be stopped with:
 > **Note**
 >
 > The *ids* that you will use will differ from this example. Make sure
-> you use the ones that corresponds to your PRODUCT cloud.
+> you use the ones that corresponds to your CloudStack cloud.
 
 Scripting with CloudMonkey
 --------------------------
@@ -457,10 +457,10 @@ jClouds CLI
 jclouds is a Java wrapper for many Cloud Providers APIs, it used in a
 large number of Cloud application to access providers that do not offer
 a standard APIs. jclouds-cli is the command line interface to jclouds
-and in PRODUCT terminology could be seen as an equivalent to
+and in CloudStack terminology could be seen as an equivalent to
 CloudMonkey.
 
-However CloudMonkey covers the entire PRODUCT API and jclouds-cli does
+However CloudMonkey covers the entire CloudStack API and jclouds-cli does
 not. Management of virtual machines, blobstore (i.e S3 like) and
 configuration management via chef are the main features.
 
@@ -551,7 +551,7 @@ and runs, you should see the following output:
 Using jclouds CLI
 -----------------
 
-The PRODUCT API driver is not installed by default. Install it with:
+The CloudStack API driver is not installed by default. Install it with:
 
     jclouds> features:install jclouds-api-cloudstack
         
@@ -662,10 +662,10 @@ commit back to this section.
 Apache Libcloud
 ===============
 
-There are many tools available to interface with the PRODUCT API. Apache
+There are many tools available to interface with the CloudStack API. Apache
 Libcloud is one of those. In this section we provide a basic example of
-how to use Libcloud with PRODUCT. It assumes that you have access to a
-PRODUCT endpoint and that you have the API access key and secret key of
+how to use Libcloud with CloudStack. It assumes that you have access to a
+CloudStack endpoint and that you have the API access key and secret key of
 a user.
 
 Installation
@@ -705,7 +705,7 @@ within the clone repository directory:
 
 > **Note**
 >
-> The PRODUCT driver is located in
+> The CloudStack driver is located in
 > */path/to/libcloud/source/libcloud/compute/drivers/cloudstack.py*.
 > file bugs on the libcloud JIRA and submit your patches as an attached
 > file to the JIRA entry.
@@ -714,10 +714,10 @@ Using Libcloud
 --------------
 
 With libcloud installed either via PyPi or via the source, you can now
-open a Python interactive shell, create an instance of a PRODUCT driver
+open a Python interactive shell, create an instance of a CloudStack driver
 and call the available methods via the libcloud API.
 
-First you need to import the libcloud modules and create a PRODUCT
+First you need to import the libcloud modules and create a CloudStack
 driver.
 
 
@@ -728,7 +728,7 @@ driver.
         
 
 Then, using your keys and endpoint, create a connection object. Note
-that this is a localtest and thus not secured. If you use a production
+that this is a localtest and thus not secured. If you use a CloudStackion
 public cloud, make sure to use SSL properly.
 
        
@@ -786,7 +786,7 @@ session:
 Management of security groups was also added. Below we show how to list,
 create and delete security groups. As well as add an ingree rule to open
 port 22 to the world. Both keypair and security groups are key for
-access to a PRODUCT Basic zone like Exoscale.
+access to a CloudStack Basic zone like Exoscale.
 
     conn.ex_list_security_groups()
     conn.ex_create_security_group(name='libcloud')
@@ -801,7 +801,7 @@ One of the interesting use cases of Libcloud is that you can use
 multiple Cloud Providers, such as AWS, Rackspace, OpenNebula, vCloud and
 so on. You can then create Driver instances to each of these clouds and
 create your own multi cloud application. In the example below we
-instantiate to libcloud PRODUCT driver, one on
+instantiate to libcloud CloudStack driver, one on
 [Exoscale](http://exoscale.ch) and the other on one
 [Ikoula](http://ikoula.com).
 
@@ -856,7 +856,7 @@ Pyton Boto
 ==========
 
 There are many tools available to interface with a AWS compatible API.
-In this section we provide a few examples that users of PRODUCT can
+In this section we provide a few examples that users of CloudStack can
 build upon.
 
 Boto Examples
@@ -864,7 +864,7 @@ Boto Examples
 
 Boto is one of them. It is a Python package available at
 https://github.com/boto/boto. In this section we provide two examples of
-Python scripts that use Boto and have been tested with the PRODUCT AWS
+Python scripts that use Boto and have been tested with the CloudStack AWS
 API Interface.
 
 First is an EC2 example. Replace the Access and Secret Keys with your
@@ -967,25 +967,25 @@ file paths to something that exists on your machine.
 Wrappers
 ========
 
-In this paragraph we introduce several PRODUCT *wrappers*. These tools
+In this paragraph we introduce several CloudStack *wrappers*. These tools
 are using client libraries presented in the previous chapter and add
 additional functionality that involve some high-level orchestration. For
 instance *knife-cloudstack* uses the power of
 [Chef](http://opscode.com), the configuration management system, to
-seamlessly bootstrap instances running in a PRODUCT cloud. Apache
+seamlessly bootstrap instances running in a CloudStack cloud. Apache
 [Whirr](http://whirr.apache.org) uses
 [jclouds](http://jclouds.incubator.apache.org) to boostrap
 [Hadoop](http://hadoop.apache.org) clusters in the cloud and pallet does
 the same thing but using the clojure language.
 
-Knife PRODUCT
+Knife CloudStack
 =============
 
 Install, Configure and Feel
 ---------------------------
 
 The Knife family of tools are drivers that automate the provisioning and
-configuration of machines in the Cloud. Knife-cloudstack is a PRODUCT
+configuration of machines in the Cloud. Knife-cloudstack is a CloudStack
 plugin for knife. Written in ruby it is used by the Chef community. To
 install Knife-CloudStack you can simply install the gem or get it from
 github:
@@ -1016,7 +1016,7 @@ cloned the knife-cloudstack repo do:
     Installing RDoc documentation for knife-cloudstack-0.0.14...
             
 
-You will then need to define your PRODUCT endpoint and your credentials
+You will then need to define your CloudStack endpoint and your credentials
 in a *knife.rb* file like so:
 
     knife[:cloudstack_url] = "http://yourcloudstackserver.com:8080/client/api
@@ -1026,7 +1026,7 @@ in a *knife.rb* file like so:
 
 With the endpoint and credentials configured as well as knife-cloudstack
 installed, you should be able to issue your first command. Remember that
-this is simply sending a PRODUCT API call to your PRODUCT based Cloud
+this is simply sending a CloudStack API call to your CloudStack based Cloud
 provider. Later in the section we will see how to do more advanced
 things with knife-cloudstack. For example, to list the service offerings
 (i.e instance types) available on the iKoula Cloud, do:
@@ -1263,10 +1263,10 @@ address for the instances.
 >     exoscale  xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx:xx
 >                     
 
-When using a PRODUCT based cloud in an Advanced zone setting, *knife*
+When using a CloudStack based cloud in an Advanced zone setting, *knife*
 can automatically allocate and associate an IP address. To illustrate
 this slightly different example I use [iKoula](http://www.ikoula.com) a
-french Cloud Provider which uses PRODUCT. I edit my *knife.rb* file to
+french Cloud Provider which uses CloudStack. I edit my *knife.rb* file to
 setup a different endpoint and the different API and secret keys. I
 remove the keypair, security group and public ip option and I do not
 specify an identity file as I will retrieve the ssh password with the
@@ -1476,12 +1476,12 @@ Apache Whirr
 [Apache Whirr](http://whirr.apache.org) is a set of libraries to run
 cloud services, internally it uses
 [jclouds](http://jclouds.incubator.apache.org) that we introduced
-earlier via the jclouds-cli interface to PRODUCT, it is java based and
+earlier via the jclouds-cli interface to CloudStack, it is java based and
 of interest to provision clusters of virtual machines on cloud
 providers. Historically it started as a set of scripts to deploy
 [Hadoop](http://hadoop.apache.org) clusters on Amazon EC2. We introduce
-Whirr has a potential PRODUCT tool to provision Hadoop cluster on
-PRODUCT based clouds.
+Whirr has a potential CloudStack tool to provision Hadoop cluster on
+CloudStack based clouds.
 
 Installing Apache Whirr
 -----------------------
@@ -1563,7 +1563,7 @@ Using Apache Whirr
 ------------------
 
 To get started with Whirr you need to setup the credentials and endpoint
-of your PRODUCT based cloud that you will be using. Edit the
+of your CloudStack based cloud that you will be using. Edit the
 *\~/.whirr/credentials* file to include a PROVIDER, IDENTITY, CREDENTIAL
 and ENDPOINT. The PROVIDER needs to be set to *cloudstack*, the IDENTITY
 is your API key, the CREDENTIAL is your secret key and the ENDPPOINT is
@@ -1624,7 +1624,7 @@ the
 
 > **Warning**
 >
-> The example shown above is specific to a production
+> The example shown above is specific to a CloudStackion
 > [Cloud](http://exoscale.ch) setup as a basic zone. This cloud uses
 > security groups for isolation between instances. The proper rules had
 > to be setup by hand. Also note the use of
@@ -1675,7 +1675,7 @@ You are now ready to launch an hadoop cluster:
 After the boostrapping process finishes, you should be able to login to
 your instances and use *hadoop* or if you are running a proxy on your
 machine, you will be able to access your hadoop cluster locally. Testing
-of Whirr for PRODUCT is still under
+of Whirr for CloudStack is still under
 [investigation](https://issues.apache.org/jira/browse/WHIRR-725) and the
 subject of a Google Summer of Code 2013 project. We currently identified
 issues with the use of security groups. Moreover this was tested on a
