@@ -23,7 +23,7 @@ Install `git` to later clone the CloudStack source code:
 
     apt-get install git
 
-Install `Maven` to later build CloudStacK
+Install `Maven` to later build CloudStack
 	
 	apt-get install maven
 
@@ -59,6 +59,10 @@ Installing from Source
 CloudStack uses git for source version control, if you know little about [git](http://book.git-scm.com/) is a good start. Once you have git setup on your machine, pull the source with:
 
     git clone https://git-wip-us.apache.org/repos/asf/cloudstack.git
+	
+To build the latest stable release (replace 4.2 with the correct version number):
+    
+    git checkout 4.2
 
 To compile Apache CloudStack, go to the cloudstack source folder and run:
 
@@ -83,13 +87,9 @@ Open your Web browser and use this URL to connect to CloudStack:
 
     http://localhost:8080/client/
 
-or
-
-   http://ip_address_where_cloudstack_is_running:8080/client
+Replace `localhost` with the IP of your management server if need be.
 
 **Note**: If you have iptables enabled, you may have to open the ports used by CloudStack. Specifically, ports 8080, 8250, and 9090.
-
-If you've run into any problems with this, please ask on the cloudstack-dev [mailing list](/mailing-lists.html).
 
 Using the Simulator
 ===================
@@ -128,10 +128,44 @@ At this stage log in the CloudStack management server at http://localhost:8080/c
 Using DevCloud
 ==============
 
+The Installing from source section will only get you to the point of runnign the management server, it does not get you any hypervisors. 
+The simulator section gets you a simulated datacenter for testing. With DevCloud you can run at least one hypervisor and add it to your management server the way you would a real physical machine.
+
+[DevCloud](https://cwiki.apache.org/confluence/display/CLOUDSTACK/DevCloud) is the CloudStack sandbox, the standard version is a VirtualBox based image. There is also a KVM based image for it. Here we only show steps with the VirtualBox image. For KVM see the [wiki](https://cwiki.apache.org/confluence/display/CLOUDSTACK/devcloud-kvm).
+
+DevCloud Pre-requisites
+--------------
+
+1. Install [VirtualBox](http://www.virtualbox.org) on your machine
+
+2. Run VirtualBox and under >Preferences create a *host-only interface* on which you disable the DHCP server
+
+3. Download the DevCloud [image](http://people.apache.org/~bhaisaab/cloudstack/devcloud/devcloud2.ova)
+
+4. In VirtualBox, under File > Import Appliance import the DevCloud image.
+
+5. Verify the settings under > Settings and check the `enable PAE` option in the processor menu
+
+6. Once the VM has booted try to `ssh` to it with credentials: root/password
+
+    ssh root@192.168.56.10
+
+Adding DevCloud as an Hypervisor
+--------------------------------
+
+With CloudStack management server running on your localhost as described in the first section.
+
+
 
 Using Packages
 ==============
 
-      
 
+
+Conclusions
+===========
+
+CloudStack is a mostly Java applicaton running with Tomcat and Mysql. It consists of a management server and depending on the hypervisors being used, an agent installed on the hypervisor farm. To complete a Cloud infrastructure however you will also need some Zone wide storage a.k.a Secondary Storage and some Cluster wide storage a.k.a Primary storage. The choice of hypervisor, storage solution and type of Zone (i.e Basic vs. Advanced) will dictate how complex your installation can be. As a quick started, you might want to consider KVM+NFS and a Basic Zone.
+
+If you've run into any problems with this, please ask on the cloudstack-dev [mailing list](/mailing-lists.html).
             
