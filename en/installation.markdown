@@ -14,8 +14,7 @@ Prerequisites
 
 In this section we'll look at installing the dependencies you'll need for Apache CloudStack development.
 
-Installing OpenJDK
-------------------
+Installing OpenJDK:
 
 Install `openjdk`. As we're using Linux, OpenJDK is our first choice. You can install it using Yum or APT, depending on which Linux distribution you use one of these commands:
 
@@ -25,8 +24,7 @@ If you're unsure of the name for the OpenJDK package, use `apt-cache search`, or
 
 Note that you are free to install another JVM if you have special needs.
 
-Installing Apache Tomcat 6
---------------------------
+Installing Apache Tomcat 6:
 
 Install `tomcat6`. Apache CloudStack developers use the tarball from the Tomcat 6 download page, as it's the easiest and fastest way.
 
@@ -46,8 +44,7 @@ Now we set the environment variables:
  
 **Note**: we usually set them in `~/.bashrc` for convenience.
 
-Install MySQL
--------------
+Install MySQL:
 
 Next, we'll install MySQL if it's not already present on the system.
 
@@ -56,16 +53,13 @@ Next, we'll install MySQL if it's not already present on the system.
 Installing from Source
 ======================
 
-
-Getting Source
---------------
+Getting Source:
 
 CloudStack uses git for source version control, if you know little about git, http://book.git-scm.com/ is a good start. Once you have git setup on your machine, pull source with:
 
     git clone https://git-wip-us.apache.org/repos/asf/cloudstack.git
 
-Compile and Deploy
-------------------
+Compile and Deploy:
 
 Maven procedure developed for Cloudstack 4.1.0 and later:
 
@@ -81,15 +75,11 @@ Deploy the database next:
 
     mvn -P developer -pl tools/devcloud -Ddeploysvr
 
-Run Apache CloudStack
----------------------
-
-To start CloudStack, run:
+Run Apache CloudStack:
 
     mvn -pl :cloud-client-ui jetty:run
 
-Log Into Apache CloudStack
---------------------------
+Log Into Apache CloudStack:
 
 Open your Web browser and use this URL to connect to CloudStack:
 
