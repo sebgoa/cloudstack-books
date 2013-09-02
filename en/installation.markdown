@@ -14,66 +14,66 @@ Prerequisites
 
 In this section we'll look at installing the dependencies you'll need for Apache CloudStack development.
 
-Installing OpenJDK:
+First update and upgrade your system:
 
-Install `openjdk`. As we're using Linux, OpenJDK is our first choice. You can install it using Yum or APT, depending on which Linux distribution you use one of these commands:
+    apt-get update 
+    apt-get upgrade
 
-    apt-get install package_name_of_openjdk
+Install `git` to later clone the CloudStack source code:
 
-If you're unsure of the name for the OpenJDK package, use `apt-cache search`, or use your distribution's GUI-based tools for installing and managing packages.
+    apt-get install git
 
-Note that you are free to install another JVM if you have special needs.
+Install `Maven` to later build CloudStacK
+	
+	apt-get install maven
 
-Installing Apache Tomcat 6:
+This should have installed Maven 3.0, check the version number with `mvn --version`
 
-Install `tomcat6`. Apache CloudStack developers use the tarball from the Tomcat 6 download page, as it's the easiest and fastest way.
+A little bit of Python can be used (e.g simulator), install the Python package management tools:
 
-Here we'll download Apache Tomcat 6 and uncompress the tarball:
+    apt-get install python-pip python-setuptools
 
-    wget http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.33/bin/apache-tomcat-6.0.33.tar.gz
+Install `openjdk`. As we're using Linux, OpenJDK is our first choice. 
 
-    tar xzf apache-tomcat-6.0.33.tar.gz
+    apt-get install openjdk-6-jdk
 
-**Note** we specifically recommend Apache Tomcat version 6.0.33 at this time. The 6.0.35 release has some issues with Apache CloudStack at this time, thus we recommend avoiding it for CloudStack development.
+Install `tomcat6`, note that the new version of tomcat on [Ubuntu](http://packages.ubuntu.com/precise/all/tomcat6) is the 6.0.35 version.
 
-Now we set the environment variables:
-
-    export CATALINA_HOME=/your_path/apache-tomcat-6.0.33/
-
-    export CATALINA_BASE=/your_path/apache-tomcat-6.0.33/
- 
-**Note**: we usually set them in `~/.bashrc` for convenience.
+    apt-get install tomcat6
 
 Next, we'll install MySQL if it's not already present on the system.
 
     apt-get install mysql-server
 
+Remember to set the correct `mysql` password in the CloudStack properties file. Mysql should be running but you can check it's status with:
+
+    service mysql status
+
+Finally install `mkisofs` with:
+	
+    apt-get install genisoimage
+
 Installing from Source
 ======================
 
-Getting Source:
-
-CloudStack uses git for source version control, if you know little about git, http://book.git-scm.com/ is a good start. Once you have git setup on your machine, pull source with:
+CloudStack uses git for source version control, if you know little about [git](http://book.git-scm.com/) is a good start. Once you have git setup on your machine, pull the source with:
 
     git clone https://git-wip-us.apache.org/repos/asf/cloudstack.git
 
-Compile and Deploy:
-
-Maven procedure developed for Cloudstack 4.1.0 and later:
-
 To compile Apache CloudStack, go to the cloudstack source folder and run:
 
-    mvn -P developer clean install
+    mvn -Pdeveloper,systemvm clean install
 
 To deploy Apache CloudStack, run:
 
-    mvn -P developer -pl developer,tools/devcloud -Ddeploydb
+    mvn -Pdeveloper -pl tools/devcloud -Ddeploysvr
 
+You will have made sure to set the proper db password in `utils/conf/db.properties`
 Deploy the database next:
 
-    mvn -P developer -pl tools/devcloud -Ddeploysvr
+    mvn -P developer -pl developer -Ddeploydb
 
-Run Apache CloudStack:
+Run Apache CloudStack with jetty for testing.
 
     mvn -pl :cloud-client-ui jetty:run
 
@@ -116,10 +116,9 @@ Stop jetty (from any previous runs)
 
 Start jetty
 
-    nohup mvn -pl client jetty:run &
-    sleep 60
-
-Setup a basic zone with Marvin
+    mvn -pl client jetty:run
+   
+Setup a basic zone with Marvin. In a separate shell://
 
     mvn -Pdeveloper,marvin.setup -Dmarvin.config=setup/dev/basic.cfg -pl :cloud-marvin integration-test
 
