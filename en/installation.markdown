@@ -186,6 +186,24 @@ To prepare your own .deb packages
 To use hosted packages
 ----------------------
 
+Edit `/etc/apt/sources.list.d/cloudstack.list` and add:
+
+    deb http://cloudstack.apt-get.eu/ubuntu precise 4.1
+
+Replace 4.1 with 4.2 once 4.2 is out
+
+Add the public keys to the trusted keys:
+
+    wget -O - http://cloudstack.apt-get.eu/release.asc|apt-key add -
+
+update your local apt cache
+
+    apt-get update
+
+Install the management server package
+	
+    apt-get install cloudstack-management
+
 
 
 Conclusions
