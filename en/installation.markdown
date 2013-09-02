@@ -68,16 +68,14 @@ To compile Apache CloudStack, go to the cloudstack source folder and run:
 
     mvn -Pdeveloper,systemvm clean install
 
-To deploy Apache CloudStack, run:
-
-    mvn -Pdeveloper -pl tools/devcloud -Ddeploysvr
+If you want to skip the tests add `-DskipTests` to the command above
 
 You will have made sure to set the proper db password in `utils/conf/db.properties`
 Deploy the database next:
 
     mvn -P developer -pl developer -Ddeploydb
 
-Run Apache CloudStack with jetty for testing.
+Run Apache CloudStack with jetty for testing. Note that `tomcat` maybe be running on port 8080, stop it before you use `jetty`
 
     mvn -pl :cloud-client-ui jetty:run
 
@@ -90,6 +88,8 @@ Open your Web browser and use this URL to connect to CloudStack:
 Replace `localhost` with the IP of your management server if need be.
 
 **Note**: If you have iptables enabled, you may have to open the ports used by CloudStack. Specifically, ports 8080, 8250, and 9090.
+
+You can now start configuring a Zone, playing with the API. Of course we did not setup any infrastructure, there is no storage, no hypervisors...etc
 
 Using the Simulator
 ===================
@@ -124,6 +124,7 @@ Setup a basic zone with Marvin. In a separate shell://
 
 At this stage log in the CloudStack management server at http://localhost:8080/client with the credentials admin/password, you should see a fully configured basic zone infrastructure. To simulate an advanced zone replace `basic.cfg` with `advanced.cfg`.
 
+You can now run integration tests, use the API etc...
 
 Using DevCloud
 ==============
@@ -134,7 +135,7 @@ The simulator section gets you a simulated datacenter for testing. With DevCloud
 [DevCloud](https://cwiki.apache.org/confluence/display/CLOUDSTACK/DevCloud) is the CloudStack sandbox, the standard version is a VirtualBox based image. There is also a KVM based image for it. Here we only show steps with the VirtualBox image. For KVM see the [wiki](https://cwiki.apache.org/confluence/display/CLOUDSTACK/devcloud-kvm).
 
 DevCloud Pre-requisites
---------------
+-----------------------
 
 1. Install [VirtualBox](http://www.virtualbox.org) on your machine
 
@@ -153,12 +154,36 @@ DevCloud Pre-requisites
 Adding DevCloud as an Hypervisor
 --------------------------------
 
-With CloudStack management server running on your localhost as described in the first section.
+Picking up from a clean build:
 
+    mvn -Pdeveloper,systemvm clean install
+    mvn -P developer -pl developer -Ddeploydb
+	
+At this stage install marvin similarly than with the simulator:
 
+    pip install tools/marvin/dist/Marvin-0.1.0.tar.gz
+
+Then you are going to configure CloudStack to use the running DevCloud instance:
+	
+    cd tools/devcloud
+    python ../marvin/marvin/deployDataCenter.py -i devcloud.cfg
+	
+If you are curious, check the `devcloud.cfg` file and see how the data center is defined: 1 Zone, 1 Pod, 1 Cluster, 1 Host, 1 primary Storage, 1 Seondary Storage, all provided by Devcloud.
+	
+You can now log in the management server at `http://localhost:8080/client` and start experimenting with the UI or the API.
+
+Do note that the management server is running in your local machine and that DevCloud is used only as a n Hypervisor. You could potentially run the management server within DevCloud as well, or memory granted, run multiple DevClouds.
 
 Using Packages
 ==============
+
+If you want you can build your own packages but you can use existing one hosted in a community repo.
+
+To prepare your own .deb packages
+---------------------------------
+
+To use hosted packages
+----------------------
 
 
 
