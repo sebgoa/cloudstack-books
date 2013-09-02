@@ -1,9 +1,9 @@
-Clients and Shells
-==================
+CloudStack Clients and High Level Wrappers
+==========================================
 
-Clients and Shells are critical to the ease of use of any API, even more
+Clients and high level Wrappers are critical to the ease of use of any API, even more
 so Cloud APIs. In this chapter we present the basis of the CloudStack API.
-We illustrate how to sign requests for the sake of completeness and
+We start by illustrating how to sign requests with the native API in the sake of completeness and
 because it is a very nice exercise for beginners. We then introduce
 CloudMonkey the CloudStack CLI and shell which boasts a 100% coverage of
 the API. While jclouds is a java library, it can also be used as a cli
@@ -11,12 +11,11 @@ or interactive shell, we present jclouds-cli to contrast it to
 CloudMonkey and introduce jclouds. Apache libcloud is a Python based API
 wrapper, once installed, a developer can use libcloud to talk to
 multiple cloud providers and cloud APIs, it serves a similar role as
-jclouds but in Python. Clostack is a clojure client. Clojure is
-receiving lots of attention recently for its clean functional
-programming style, clojure is the basis of Pallet which we will talk
-about in the next chapter. Clostack serves as a teaser for Clojure.
-Finally we cover Boto, the well-known Python Amazon Web Service
-interface, and show how it can be used with a CloudStack cloud.
+jclouds but in Python. We present Boto, the well-known Python Amazon Web Service
+interface, and show how it can be used with a CloudStack cloud running the AWS interface.
+In the following chapter we introduce several high level wrappers for configuration management
+Salt-cloud for Saltstack and knife-cs for Chef as well as Apache Whirr for on-demand provisioning
+of clusters of virtual machine instances.
 
 The CloudStack API
 ===============
@@ -1782,3 +1781,7 @@ And you can finally check the output:
     test    1
     words   1
             
+Conclusions
+===========
+
+The CloudStack API is very rich and easy to use. You can write your own client by following the section on how to sign requests, or you can use an existing client in the language of your choice. Well know libraries developed by the community work well with CloudStack, such as Apache libcloud and Apache jclouds. Configuration management systems also have plugins to work transparently with CloudStack, in this little book we presented SaltStack and Knife-cs. Finally, going a bit beyond simple clients we presented Apache Whirr that allows you to create Hadoop clusters on-demand (e.g elasticsearch, cassandra also work). Take your pick and write your applications on top of CloudStack using one of those tools.
