@@ -60,7 +60,7 @@ CloudStack uses git for source version control, if you know little about [git](h
 
     git clone https://git-wip-us.apache.org/repos/asf/cloudstack.git
 	
-To build the latest stable release (replace 4.2 with the correct version number):
+To build the latest stable release:
     
     git checkout 4.2
 
@@ -71,6 +71,7 @@ To compile Apache CloudStack, go to the cloudstack source folder and run:
 If you want to skip the tests add `-DskipTests` to the command above
 
 You will have made sure to set the proper db password in `utils/conf/db.properties`
+
 Deploy the database next:
 
     mvn -P developer -pl developer -Ddeploydb
