@@ -18,7 +18,7 @@ Installing OpenJDK:
 
 Install `openjdk`. As we're using Linux, OpenJDK is our first choice. You can install it using Yum or APT, depending on which Linux distribution you use one of these commands:
 
-`apt-get install package_name_of_openjdk`
+    apt-get install package_name_of_openjdk
 
 If you're unsure of the name for the OpenJDK package, use `apt-cache search`, or use your distribution's GUI-based tools for installing and managing packages.
 
@@ -30,25 +30,23 @@ Install `tomcat6`. Apache CloudStack developers use the tarball from the Tomcat 
 
 Here we'll download Apache Tomcat 6 and uncompress the tarball:
 
-`wget http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.33/bin/apache-tomcat-6.0.33.tar.gz`
+    wget http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.33/bin/apache-tomcat-6.0.33.tar.gz
 
-`tar xzf apache-tomcat-6.0.33.tar.gz`
+    tar xzf apache-tomcat-6.0.33.tar.gz
 
 **Note** we specifically recommend Apache Tomcat version 6.0.33 at this time. The 6.0.35 release has some issues with Apache CloudStack at this time, thus we recommend avoiding it for CloudStack development.
 
 Now we set the environment variables:
 
-`export CATALINA_HOME=/your_path/apache-tomcat-6.0.33/`
+    export CATALINA_HOME=/your_path/apache-tomcat-6.0.33/
 
-`export CATALINA_BASE=/your_path/apache-tomcat-6.0.33/`
+    export CATALINA_BASE=/your_path/apache-tomcat-6.0.33/
  
 **Note**: we usually set them in `~/.bashrc` for convenience.
 
-Install MySQL:
-
 Next, we'll install MySQL if it's not already present on the system.
 
-`apt-get install mysql-server`
+    apt-get install mysql-server
 
 Installing from Source
 ======================
