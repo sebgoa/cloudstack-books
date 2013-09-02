@@ -1,2 +1,2 @@
-% The Little CloudStack Book
+% The Little CloudStack Clients Book
 % Sebastien Goasguen

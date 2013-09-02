@@ -1341,9 +1341,6 @@ according to a schedule so that information about one instance can be
 passed to another one. With *knife cloudstack* this is possible by using
 *stacks*.
 
-Creating a Stack
-----------------
-
 Salt
 ====
 
