@@ -158,7 +158,7 @@ Adding DevCloud as an Hypervisor
 Picking up from a clean build:
 
     mvn -Pdeveloper,systemvm clean install
-    mvn -P developer -pl developer -Ddeploydb
+    mvn -P developer -pl developer,tools/devcloud -Ddeploydb
 	
 At this stage install marvin similarly than with the simulator:
 
