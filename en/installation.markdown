@@ -201,7 +201,7 @@ With access and secret keys generated for a user you should now be able to use P
 
     res = images[0].run(instance_type='m1.small',security_groups=['default'])
 
-Note the new `api_version` number in the connection object and also note that there was no user registration to make like in previous CloudStack releases../
+Note the new `api_version` number in the connection object and also note that there was no user registration to make like in previous CloudStack releases.
 
 Using Packages
 ==============
