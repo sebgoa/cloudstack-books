@@ -148,7 +148,7 @@ DevCloud Pre-requisites
 
 5. Verify the settings under > Settings and check the `enable PAE` option in the processor menu
 
-6. Once the VM has booted try to `ssh` to it with credentials: root/password
+6. Once the VM has booted try to `ssh` to it with credentials: `root/password`
 
     ssh root@192.168.56.10
 
@@ -174,6 +174,34 @@ If you are curious, check the `devcloud.cfg` file and see how the data center is
 You can now log in the management server at `http://localhost:8080/client` and start experimenting with the UI or the API.
 
 Do note that the management server is running in your local machine and that DevCloud is used only as a n Hypervisor. You could potentially run the management server within DevCloud as well, or memory granted, run multiple DevClouds.
+
+
+Testing the AWS API interface
+=============================
+
+Starting from a running management server (with DevCloud for instance), start the AWS API interface in a separate shell with:
+
+    mvn -Pawsapi -pl:cloud-awsapi jetty:run
+
+Log into the CloudStack UI `http://localhost:8080/client`, go to *Service Offerings* and edit one of the compute offerings to have the name `m1.small` or any of the other AWS EC2 instance types.
+
+With access and secret keys generated for a user you should now be able to use Python [Boto](http://docs.pythonboto.org/en/latest/) module:
+
+    import boto
+    import boto.ec2
+
+    accesskey="2IUSA5xylbsPSnBQFoWXKg3RvjHgsufcKhC1SeiCbeEc0obKwUlwJamB_gFmMJkFHYHTIafpUx0pHcfLvt-dzw"
+    secretkey="oxV5Dhhk5ufNowey7OVHgWxCBVS4deTl9qL0EqMthfPBuy3ScHPo2fifDxw1aXeL5cyH10hnLOKjyKphcXGeDA"
+ 
+    region = boto.ec2.regioninfo.RegionInfo(name="ROOT", endpoint="localhost")
+    conn = boto.connect_ec2(aws_access_key_id=accesskey, aws_secret_access_key=secretkey, is_secure=False, region=region, port=7080, path="/awsapi", api_version="2012-08-15")
+
+    images=conn.get_all_images()
+    print images
+
+    res = images[0].run(instance_type='m1.small',security_groups=['default'])
+
+Note the new `api_version` number in the connection object and also note that there was no user registration to make like in previous CloudStack releases../
 
 Using Packages
 ==============
