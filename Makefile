@@ -18,14 +18,14 @@ clients-pdf:
 	cd en && $(PDF_BUILDER) $(PDF_BUILDER_FLAGS) $(SOURCE_FILE_NAME_1) -o $(BOOK_FILE_NAME_1).pdf
 
 clients-epub: en/title.png en/title.1.txt en/clients.markdown
-	$(EPUB_BUILDER) $(EPUB_BUILDER_FLAGS) $^ -o $@
+	$(EPUB_BUILDER) $(EPUB_BUILDER_FLAGS) $^ -o ./en/$(BOOK_FILE_NAME_1).epub
 
 installation-pdf:
 	cd en && $(PDF_BUILDER) $(PDF_BUILDER_FLAGS) $(SOURCE_FILE_NAME_2) -o $(BOOK_FILE_NAME_2).pdf
 
 installation-epub: en/title.png en/title.2.txt en/installation.markdown
-	$(EPUB_BUILDER) $(EPUB_BUILDER_FLAGS) $^ -o $@
+	$(EPUB_BUILDER) $(EPUB_BUILDER_FLAGS) $^ -o ./en/$(BOOK_FILE_NAME_1).epub
 
 clean:
-	rm -f */$(BOOK_FILE_NAME).pdf
-	rm -f */$(BOOK_FILE_NAME).epub
+	rm -f */*.pdf
+	rm -f */*.epub
