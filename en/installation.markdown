@@ -164,6 +164,10 @@ At this stage install marvin similarly than with the simulator:
 
     pip install tools/marvin/dist/Marvin-0.1.0.tar.gz
 
+Start the management server
+	
+    mvn -pl client jetty:run
+
 Then you are going to configure CloudStack to use the running DevCloud instance:
 	
     cd tools/devcloud
@@ -181,7 +185,7 @@ Testing the AWS API interface
 
 Starting from a running management server (with DevCloud for instance), start the AWS API interface in a separate shell with:
 
-    mvn -Pawsapi -pl:cloud-awsapi jetty:run
+    mvn -Pawsapi -pl :cloud-awsapi jetty:run
 
 Log into the CloudStack UI `http://localhost:8080/client`, go to *Service Offerings* and edit one of the compute offerings to have the name `m1.small` or any of the other AWS EC2 instance types.
 
