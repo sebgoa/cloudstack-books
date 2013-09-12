@@ -25,11 +25,14 @@ Then a few missing .sty files might need to be installed:
     $ sudo tlmgr install preprint
 
 To build the .pdf files:
+=======
 
     $ make clients-pdf
     $ make installation-pdf
 
+
 To build the .epub files:
+=======
 
     $ make clients-epub
     $ make installation-epub
