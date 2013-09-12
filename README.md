@@ -18,7 +18,6 @@ Grabbed it from [here](http://www.fontpalace.com/font-details/Consolas/) double 
 
 Then a few missing .sty files might need to be installed:
 
-    $ sudo tlmgr update --self
     $ sudo tlmgr update --all
     $ sudo tlmgr install sectsty
     $ sudo tlmgr install paralist
