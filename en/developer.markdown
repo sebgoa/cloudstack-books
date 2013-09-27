@@ -1,93 +1,62 @@
-CloudStack Installation
-=======================
+* CloudStack Installation from Source for Developers
 
-This book is aimed at CloudStack users and developers who need to build the code. These instructions are valid on a CentOS 6.4 system, please adapt them if you are on a different operating system. We go through several scenarios:
+This book is aimed at CloudStack developers who need to build the code. These instructions are valid on a Ubuntu 12.04 system, please adapt them if you are on a different operating system. We go through several scenarios:
 
 1. Installation of the prerequisites
 2. Compiling and installation from source
 3. Using the CloudStack simulator
 4. Installation with DevCloud the CloudStack sandbox
-5. Building packages and/or using the community packaged repo.
 
-Prerequisites
-=============
+* Prerequisites
 
 In this section we'll look at installing the dependencies you'll need for Apache CloudStack development.
 
 First update and upgrade your system:
 
-    yum -y update
-    yum -y upgrade
+    apt-get update 
+    apt-get upgrade
 	
-If not already installed, install NTP for clock synchornization
+Install NTP to synchronize thc clocks:
 
-    yum -y install ntp
+    apt-get install openntpd
 
 Install `openjdk`. As we're using Linux, OpenJDK is our first choice. 
 
-    yum -y install java-1.6.0-openjdk
+	apt-get install openjdk-6-jdk
 
-Install `tomcat6`, note that the version of tomcat6 in the default CentOS 6.4 repo is 6.0.24, so we will grab the 6.0.35 version.
-The 6.0.24 version will be installed anyway as a dependency to cloudstack.
+Install `tomcat6`, note that the new version of tomcat on [Ubuntu](http://packages.ubuntu.com/precise/all/tomcat6) is the 6.0.35 version.
 
-    wget https://archive.apache.org/dist/tomcat/tomcat-6/v6.0.35/bin/apache-tomcat-6.0.35.tar.gz
-    tar xzvf apache-tomcat-6.0.35.tar.gz -C /usr/local
-	
-Setup tomcat6 system wide by creating a file `/etc/profile.d/tomcat.sh` with the following content:
-
-    export CATALINA_BASE=/usr/local/apache-tomcat-6.0.35
-    export CATALINA_HOME=/usr/local/apache-tomcat-6.0.35
+    apt-get install tomcat6
 
 Next, we'll install MySQL if it's not already present on the system.
 
-    yum -y install mysql mysql-server
+    apt-get install mysql-server
 
 Remember to set the correct `mysql` password in the CloudStack properties file. Mysql should be running but you can check it's status with:
 
-    service mysqld status
-	
-At this stage you can jump to the section on installing from packages. Developers who want to build from source will need to add the following packages:
+    service mysql status
+
+Developers wanting to build CloudStack from source will want to install the following additional packages. If you dont' want to build from source just jump to the next section.
 
 Install `git` to later clone the CloudStack source code:
 
-    yum -y install git
+    apt-get install git
 
-Install `Maven` to later build CloudStack. Grab the 3.0.5 release from the Maven [website](http://maven.apache.org/download.cgi)
-
-    wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.0.5/binaries/apache-maven-3.0.5-bin.tar.gz
-    tar xzf apache-maven-3.0.5-bin.tar.gz -C /usr/local
-    cd /usr/local
-	ln -s apache-maven-3.0.5 maven
-
-Setup Maven system wide by creating a `/etc/profile.d/maven.sh` file with the following content:
+Install `Maven` to later build CloudStack
 	
-	export M2_HOME=/usr/local/maven
-	export PATH=${M2_HOME}/bin:${PATH}
-
-Log out and log in again and you will have maven in your PATH:
-	
-	mvn --version
+	apt-get install maven
 
 This should have installed Maven 3.0, check the version number with `mvn --version`
 
 A little bit of Python can be used (e.g simulator), install the Python package management tools:
 
-    yum -y install python-setuptools
-
-To install python-pip you might want to setup the Extra Packages for Enterprise Linux (EPEL) repo
-
-    cd /tmp
-    wget http://mirror-fpt-telecom.fpt.net/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
-    rpm -ivh epel-release-6-8.noarch.rpm
-	
-Then update you repository cache `yum update` and install pip `yum -y install python-pip`
+    apt-get install python-pip python-setuptools
 
 Finally install `mkisofs` with:
 	
-    yum -y install genisoimage
-
-Installing from Source
-======================
+    apt-get install genisoimage
+	
+* Installing from Source
 
 CloudStack uses git for source version control, if you know little about [git](http://book.git-scm.com/) is a good start. Once you have git setup on your machine, pull the source with:
 
@@ -125,8 +94,7 @@ Replace `localhost` with the IP of your management server if need be.
 
 You can now start configuring a Zone, playing with the API. Of course we did not setup any infrastructure, there is no storage, no hypervisors...etc
 
-Using the Simulator
-===================
+* Using the Simulator
 
 CloudStack comes with a simulator based on Python bindings called *Marvin*. Marvin is available in the CloudStack source code or on Pypi.
 With Marvin you can simulate your data center infrastructure by providing CloudStack with a configuration file that defines the number of zones/pods/clusters/hosts, types of storage etc. You can then develop and test the CloudStack management server *as if* it was managing your production infrastructure.
@@ -160,16 +128,14 @@ At this stage log in the CloudStack management server at http://localhost:8080/c
 
 You can now run integration tests, use the API etc...
 
-Using DevCloud
-==============
+* Using DevCloud
 
 The Installing from source section will only get you to the point of runnign the management server, it does not get you any hypervisors. 
 The simulator section gets you a simulated datacenter for testing. With DevCloud you can run at least one hypervisor and add it to your management server the way you would a real physical machine.
 
 [DevCloud](https://cwiki.apache.org/confluence/display/CLOUDSTACK/DevCloud) is the CloudStack sandbox, the standard version is a VirtualBox based image. There is also a KVM based image for it. Here we only show steps with the VirtualBox image. For KVM see the [wiki](https://cwiki.apache.org/confluence/display/CLOUDSTACK/devcloud-kvm).
 
-DevCloud Pre-requisites
------------------------
+** DevCloud Pre-requisites
 
 1. Install [VirtualBox](http://www.virtualbox.org) on your machine
 
@@ -181,90 +147,65 @@ DevCloud Pre-requisites
 
 5. Verify the settings under > Settings and check the `enable PAE` option in the processor menu
 
-6. Once the VM has booted try to `ssh` to it with credentials: root/password
+6. Once the VM has booted try to `ssh` to it with credentials: `root/password`
 
     ssh root@192.168.56.10
 
-Adding DevCloud as an Hypervisor
---------------------------------
+** Adding DevCloud as an Hypervisor
 
 Picking up from a clean build:
 
     mvn -Pdeveloper,systemvm clean install
-    mvn -P developer -pl developer -Ddeploydb
+    mvn -P developer -pl developer,tools/devcloud -Ddeploydb
 	
 At this stage install marvin similarly than with the simulator:
 
     pip install tools/marvin/dist/Marvin-0.1.0.tar.gz
+
+Start the management server
+	
+    mvn -pl client jetty:run
 
 Then you are going to configure CloudStack to use the running DevCloud instance:
 	
     cd tools/devcloud
     python ../marvin/marvin/deployDataCenter.py -i devcloud.cfg
 	
-If you are curious, check the `devcloud.cfg` file and see how the data center is defined: 1 Zone, 1 Pod, 1 Cluster, 1 Host, 1 primary Storage, 1 Secondary Storage, all provided by Devcloud.
+If you are curious, check the `devcloud.cfg` file and see how the data center is defined: 1 Zone, 1 Pod, 1 Cluster, 1 Host, 1 primary Storage, 1 Seondary Storage, all provided by Devcloud.
 	
 You can now log in the management server at `http://localhost:8080/client` and start experimenting with the UI or the API.
 
 Do note that the management server is running in your local machine and that DevCloud is used only as a n Hypervisor. You could potentially run the management server within DevCloud as well, or memory granted, run multiple DevClouds.
 
-Using Packages
-==============
 
-If you want you can build your own packages but you can use existing one hosted in a community repo.
+* Testing the AWS API interface
 
-To prepare your own .rpm packages
----------------------------------
+Starting from a running management server (with DevCloud for instance), start the AWS API interface in a separate shell with:
 
-To use hosted packages
-----------------------
+    mvn -Pawsapi -pl :cloud-awsapi jetty:run
 
-Create and edit `/etc/yum.repos.d/cloudstack.repo` and add:
+Log into the CloudStack UI `http://localhost:8080/client`, go to *Service Offerings* and edit one of the compute offerings to have the name `m1.small` or any of the other AWS EC2 instance types.
 
-    [cloudstack]
-	name=cloudstack
-	baseurl=http://cloudstack.apt-get.eu/rhel/4.1
-	enabled=1
-	gpgcheck=0
+With access and secret keys generated for a user you should now be able to use Python [Boto](http://docs.pythonboto.org/en/latest/) module:
 
-Replace 4.1 with 4.2 once 4.2 is out
+    import boto
+    import boto.ec2
 
-Update your local yum cache
+    accesskey="2IUSA5xylbsPSnBQFoWXKg3RvjHgsufcKhC1SeiCbeEc0obKwUlwJamB_gFmMJkFHYHTIafpUx0pHcfLvt-dzw"
+    secretkey="oxV5Dhhk5ufNowey7OVHgWxCBVS4deTl9qL0EqMthfPBuy3ScHPo2fifDxw1aXeL5cyH10hnLOKjyKphcXGeDA"
+ 
+    region = boto.ec2.regioninfo.RegionInfo(name="ROOT", endpoint="localhost")
+    conn = boto.connect_ec2(aws_access_key_id=accesskey, aws_secret_access_key=secretkey, is_secure=False, region=region, port=7080, path="/awsapi", api_version="2012-08-15")
 
-    yum update
+    images=conn.get_all_images()
+    print images
 
-Install the management server package
-	
-    yum install cloudstack-management
+    res = images[0].run(instance_type='m1.small',security_groups=['default'])
 
-Set SELINUX to permissive (you will need to edit /etc/selinux/config to make it persist on reboot):
+Note the new `api_version` number in the connection object and also note that there was no user registration to make like in previous CloudStack releases.
 
-    setenforce permissive
+* Conclusions
 
-Setup the database
-
-    cloudstack-setup-databases cloud:<dbpassword>@localhost \
-    --deploy-as=root:<password> \
-    -e <encryption_type> \
-    -m <management_server_key> \
-    -k <database_key> \
-    -i <management_server_ip>
-
-Start the management server
-
-    cloudstack-setup-management
-
-You can check the status or restart the management server with:
-
-    service cloudstack-management <status|restart>
-
-You should now be able to login to the management server UI at `http://localhost:8080/client`. Replace `localhost` with the appropriate IP address if needed
-
-
-Conclusions
-===========
-
-CloudStack is a mostly Java application running with Tomcat and Mysql. It consists of a management server and depending on the hypervisors being used, an agent installed on the hypervisor farm. To complete a Cloud infrastructure however you will also need some Zone wide storage a.k.a Secondary Storage and some Cluster wide storage a.k.a Primary storage. The choice of hypervisor, storage solution and type of Zone (i.e Basic vs. Advanced) will dictate how complex your installation can be. As a quick started, you might want to consider KVM+NFS and a Basic Zone.
+CloudStack is a mostly Java application running with Tomcat and Mysql. It consists of a management server and depending on the hypervisors being used, an agent installed on the hypervisor farm. To complete a Cloud infrastructure however you will also need some Zone wide storage a.k.a Secondary Storage and some Cluster wide storage a.k.a Primary storage. The choice of hypervisor, storage solution and type of Zone (i.e Basic vs. Advanced) will dictate how complex your installation can be. As a quick start, you might want to consider KVM+NFS and a Basic Zone.
 
 If you've run into any problems with this, please ask on the cloudstack-dev [mailing list](/mailing-lists.html).
-            
