@@ -1,22 +1,28 @@
 * CloudStack Installation from Source for Developers
 
-This book is aimed at CloudStack developers who need to build the code. These instructions are valid on a Ubuntu 12.04 system, please adapt them if you are on a different operating system. We go through several scenarios:
+This book is aimed at CloudStack developers who need to build the code. These instructions are valid on a Ubuntu 12.04 and CentOS 6.4 systems and were tested with the 4.2 release of Apache CloudStack, please adapt them if you are on a different operating system or using a newer/older version of CloudStack. We go through several scenarios:
 
 1. Installation of the prerequisites
 2. Compiling and installation from source
 3. Using the CloudStack simulator
 4. Installation with DevCloud the CloudStack sandbox
+5. Building your own packages
+6. The CloudStack API
+7. Testing the AWS API interface
+
 
 * Prerequisites
 
 In this section we'll look at installing the dependencies you'll need for Apache CloudStack development.
+
+** On Ubuntu 12.04
 
 First update and upgrade your system:
 
     apt-get update 
     apt-get upgrade
 	
-Install NTP to synchronize thc clocks:
+NTP might already be installed, check it with `service ntp status`. If it's not then install NTP to synchronize the clocks:
 
     apt-get install openntpd
 
@@ -56,6 +62,79 @@ Finally install `mkisofs` with:
 	
     apt-get install genisoimage
 	
+** On centOS 6.4
+	
+First update and upgrade your system:
+
+    yum -y update
+    yum -y upgrade
+	
+If not already installed, install NTP for clock synchornization
+
+    yum -y install ntp
+
+Install `openjdk`. As we're using Linux, OpenJDK is our first choice. 
+
+    yum -y install java-1.6.0-openjdk
+
+Install `tomcat6`, note that the version of tomcat6 in the default CentOS 6.4 repo is 6.0.24, so we will grab the 6.0.35 version.
+The 6.0.24 version will be installed anyway as a dependency to cloudstack.
+
+    wget https://archive.apache.org/dist/tomcat/tomcat-6/v6.0.35/bin/apache-tomcat-6.0.35.tar.gz
+    tar xzvf apache-tomcat-6.0.35.tar.gz -C /usr/local
+	
+Setup tomcat6 system wide by creating a file `/etc/profile.d/tomcat.sh` with the following content:
+
+    export CATALINA_BASE=/usr/local/apache-tomcat-6.0.35
+    export CATALINA_HOME=/usr/local/apache-tomcat-6.0.35
+
+Next, we'll install MySQL if it's not already present on the system.
+
+    yum -y install mysql mysql-server
+
+Remember to set the correct `mysql` password in the CloudStack properties file. Mysql should be running but you can check it's status with:
+
+    service mysqld status
+
+Install `git` to later clone the CloudStack source code:
+
+    yum -y install git
+
+Install `Maven` to later build CloudStack. Grab the 3.0.5 release from the Maven [website](http://maven.apache.org/download.cgi)
+
+    wget http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.0.5/binaries/apache-maven-3.0.5-bin.tar.gz
+    tar xzf apache-maven-3.0.5-bin.tar.gz -C /usr/local
+    cd /usr/local
+	ln -s apache-maven-3.0.5 maven
+
+Setup Maven system wide by creating a `/etc/profile.d/maven.sh` file with the following content:
+	
+	export M2_HOME=/usr/local/maven
+	export PATH=${M2_HOME}/bin:${PATH}
+
+Log out and log in again and you will have maven in your PATH:
+	
+	mvn --version
+
+This should have installed Maven 3.0, check the version number with `mvn --version`
+
+A little bit of Python can be used (e.g simulator), install the Python package management tools:
+
+    yum -y install python-setuptools
+
+To install python-pip you might want to setup the Extra Packages for Enterprise Linux (EPEL) repo
+
+    cd /tmp
+    wget http://mirror-fpt-telecom.fpt.net/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
+    rpm -ivh epel-release-6-8.noarch.rpm
+	
+Then update you repository cache `yum update` and install pip `yum -y install python-pip`
+
+Finally install `mkisofs` with:
+	
+    yum -y install genisoimage
+
+	
 * Installing from Source
 
 CloudStack uses git for source version control, if you know little about [git](http://book.git-scm.com/) is a good start. Once you have git setup on your machine, pull the source with:
@@ -92,7 +171,7 @@ Replace `localhost` with the IP of your management server if need be.
 
 **Note**: If you have iptables enabled, you may have to open the ports used by CloudStack. Specifically, ports 8080, 8250, and 9090.
 
-You can now start configuring a Zone, playing with the API. Of course we did not setup any infrastructure, there is no storage, no hypervisors...etc
+You can now start configuring a Zone, playing with the API. Of course we did not setup any infrastructure, there is no storage, no hypervisors...etc. However you can run tests using the simulator. The following section shows you how to use the simulator so that you don't have to setup a physical infrastructure.
 
 * Using the Simulator
 
@@ -177,8 +256,108 @@ You can now log in the management server at `http://localhost:8080/client` and s
 
 Do note that the management server is running in your local machine and that DevCloud is used only as a n Hypervisor. You could potentially run the management server within DevCloud as well, or memory granted, run multiple DevClouds.
 
+* Building Packages
+
+Working from source is necessary when developing CloudStack. As mentioned earlier this is not primarily intended for users. However some may want to modify the code for their own use and specific infrastructure. The may also need to build their own packages for security reasons and due to network connectivity constraints. This section shows you the gist of how to build packages. We assume that the reader will know how to create a repository to serve this packages. The complete documentation is available on the [website](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.2.0/html/Installation_Guide/sect-source-builddebs.html)
+
+To build debian packages you will need couple extra packages that we did not need to install for source compilation:
+
+    apt-get install python-mysqldb
+    apt-get install debhelper
+	
+Then build the packages with:
+
+	dpkg-buildpackage -uc -us
+
+One directory up from the CloudStack root dir you will find:
+
+    cloudstack_4.2.0_amd64.changes
+    cloudstack_4.2.0.dsc
+    cloudstack_4.2.0.tar.gz
+    cloudstack-agent_4.2.0_all.deb
+    cloudstack-awsapi_4.2.0_all.deb
+    cloudstack-cli_4.2.0_all.deb
+    cloudstack-common_4.2.0_all.deb
+    cloudstack-docs_4.2.0_all.deb
+    cloudstack-management_4.2.0_all.deb
+    cloudstack-usage_4.2.0_all.deb
+
+Of course the community provides a repository for these packages and you can use it instead of building your own packages and putting them in your own repo. Instructions on how to use this community repository are available in the installation book.
+
+* The CloudStack API
+
+The CloudStack API is a query based API using http that return results in XML or JSON. It is used to implement the default web UI. This API is not a standard like [OGF OCCI](http://www.ogf.org/gf/group_info/view.php?group=occi-wg) or [DMTF CIMI](http://dmtf.org/standards/cloud) but is easy to learn. Mapping exists between the AWS API and the CloudStack API as will be seen in the next section. Recently a Google Compute Engine interface was also developed that maps the GCE REST API to the CloudStack API described here. The API [docs](http://cloudstack.apache.org/docs/api/) are a good start to learn the extent of the API. Multiple clients exist on [github](https://github.com/search?q=cloudstack+client&ref=cmdform) to use this API, you should be able to find one in your favorite language. The reference documentation for the API and changes that might occur from version to version is availble [on-line](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.1.1/html/Developers_Guide/index.html). This short section is aimed at providing a quick summary to give you a base understanding of how to use this API. As a quick start, a good way to explore the API is to navigate the dashboard with a firebug console (or similar developer console) to study the queries.
+
+In a succint statement, the CloudStack query API can be used via http GET requests made against your cloud endpoint (e.g http://localhost:8080/client/api). The API name is passed using the `command` key and the various parameters for this API call are passed as key value pairs. The request is signed using the access key and secret key of the user making the call. Some calls are synchronous while some are asynchronous, this is documented in the API [docs](http://cloudstack.apache.org/docs/api/). Asynchronous calls return a `jobid`, the status and result of a job can be queried with the `queryAsyncJobResult` call. Let's get started and give an example of calling the `listUsers` API in Python.
+
+First you will need to generate keys to make requests. Going through the dashboard, go under `Accounts` select the appropriate account then click on `Show Users` select the intended users and generate keys using the `Generate Keys` icon. You will see an `API Key` and `Secret Key` field being generated. The keys will be of the form:
+
+    API Key : XzAz0uC0t888gOzPs3HchY72qwDc7pUPIO8LxC-VkIHo4C3fvbEBY_Ccj8fo3mBapN5qRDg_0_EbGdbxi8oy1A
+	Secret Key: zmBOXAXPlfb-LIygOxUVblAbz7E47eukDS_0JYUxP3JAmknOYo56T0R-AcM7rK7SMyo11Y6XW22gyuXzOdiybQ
+
+Open a Python shell and import the basic modules necessary to make the request. Do note that this request could be made many different ways, this is just a low level example. The `urllib*` modules are used to make the http request and do url encoding. The `hashlib` module gives us the sha1 hash function. It used to geenrate the `hmac` (Keyed Hashing for Message Authentication) using the secretkey. The result is encoded using the `base64` module.
+
+    $python
+    Python 2.7.3 (default, Nov 17 2012, 19:54:34) 
+    [GCC 4.2.1 Compatible Apple Clang 4.1 ((tags/Apple/clang-421.11.66))] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import urllib2
+    >>> import urllib
+    >>> import hashlib
+    >>> import hmac
+    >>> import base64
+
+Define the endpoint of the Cloud, the command that you want to execute, the type of the response (i.e XML or JSON) and the keys of the user. Note that we do not put the secretkey in our request dictionary because it is only used to compute the hmac.
+
+    >>> baseurl='http://localhost:8080/client/api?'
+    >>> request={}
+    >>> request['command']='listUsers'
+    >>> request['response']='json'
+    >>> request['apikey']='plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg'
+    >>> secretkey='VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZsYBkoXkY9b7eq1EhwJaw7FF3akA3KBQ'
+
+Build the base request string, the combination of all the key/pairs of the request, url encoded and joined with ampersand.
+
+    >>> request_str='&'.join(['='.join([k,urllib.quote_plus(request[k])]) for k in request.keys()])
+    >>> request_str
+    'apikey=plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg&command=listUsers&response=json'
+
+Compute the signature with hmac, do a 64 bit encoding and a url encoding, the string used for the signature is similar to the base request string shown above but the keys/values are lower cased and joined in a sorted order
+
+    >>> sig_str='&'.join(['='.join([k.lower(),urllib.quote_plus(request[k].lower().replace('+','%20'))])for k in sorted(request.iterkeys())]) 
+    >>> sig_str
+    'apikey=plgwjfzk4gys3momtvmjuvg-x-jlwlnfauj9gabbbf9edm-kaymmailqzzq1elzlyq_u38zcm0bewzgudp66mg&command=listusers&response=json'
+    >>> sig=hmac.new(secretkey,sig_str,hashlib.sha1).digest()
+    >>> sig
+    'M:]\x0e\xaf\xfb\x8f\xf2y\xf1p\x91\x1e\x89\x8a\xa1\x05\xc4A\xdb'
+    >>> sig=base64.encodestring(hmac.new(secretkey,sig_str,hashlib.sha1).digest())
+    >>> sig
+    'TTpdDq/7j/J58XCRHomKoQXEQds=\n'
+    >>> sig=base64.encodestring(hmac.new(secretkey,sig_str,hashlib.sha1).digest()).strip()
+    >>> sig
+    'TTpdDq/7j/J58XCRHomKoQXEQds='
+    >>> sig=urllib.quote_plus(base64.encodestring(hmac.new(secretkey,sig_str,hashlib.sha1).digest()).strip())
+
+Finally, build the entire string by joining the baseurl, the request str and the signature. Then do an http GET:
+
+    >>> req=baseurl+request_str+'&signature='+sig
+    >>> req
+    'http://localhost:8080/client/api?apikey=plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg&command=listUsers&response=json&signature=TTpdDq%2F7j%2FJ58XCRHomKoQXEQds%3D'
+    >>> res=urllib2.urlopen(req)
+    >>> res.read()
+    '{ "listusersresponse" : { "count":1 ,"user" : [  {"id":"7ed6d5da-93b2-4545-a502-23d20b48ef2a","username":"admin","firstname":"admin",
+	                                                   "lastname":"cloud","created":"2012-07-05T12:18:27-0700","state":"enabled","account":"admin",
+													   "accounttype":1,"domainid":"8a111e58-e155-4482-93ce-84efff3c7c77","domain":"ROOT",
+													   "apikey":"plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg",
+													   "secretkey":"VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZsYBkoXkY9b7eq1EhwJaw7FF3akA3KBQ",
+													   "accountid":"7548ac03-af1d-4c1c-9064-2f3e2c0eda0d"}]}}
+													   
+All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favorite client of use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods. It has nice auto-completion and help feature as well as an API discovery mechanism since 4.2.
+
 
 * Testing the AWS API interface
+
+While the native CloudStack API is not a standard, CloudStack provides a AWS EC2 compatible interface. It has the great advantage that existing tools written with EC2 libraries can be re-used against a CloudStack based cloud. In the installation books we described how to run this interface from installing packages. In this section we show you how to compile the interface with `maven` and test it with Python boto module.
 
 Starting from a running management server (with DevCloud for instance), start the AWS API interface in a separate shell with:
 
