@@ -42,6 +42,10 @@ Remember to set the correct `mysql` password in the CloudStack properties file. 
 
     service mysql status
 
+If it is not running you can start mysql with:
+	
+    service mysql start
+
 Developers wanting to build CloudStack from source will want to install the following additional packages. If you dont' want to build from source just jump to the next section.
 
 Install `git` to later clone the CloudStack source code:
