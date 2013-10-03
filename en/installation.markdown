@@ -1,4 +1,6 @@
-# CloudStack Installation
+__># CloudStack Installation<__
+
+* * *
 
 This book is aimed at CloudStack users who need to install CloudStack from the community provided packages. These instructions are valid on a Ubuntu 12.04 system, please adapt them if you are on a different operating system. In this book we will setup a management server and one Hypervisor with KVM. We will setup a `basic` networking zone.
 
