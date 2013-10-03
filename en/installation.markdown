@@ -244,7 +244,6 @@ Then restart the management server with `service cloudstack-management restart`
 
 If instances don't start due to this issue, it may be that your hosts don't have enough RAM to start the instances or that the service offering that the service offering that you are using is too `big`. Try to create a service offering that requires less RAM and storage. Alternatively increase the RAM of your hypervisors.
 
-Be also mindfull of disk offerings, by default they are created using a `shared` storage pool. In this deployment, the primary storage is using local storage and this may cause some issues. Either do not use any data disks when starting an instance or create a data disk offering which uses local storage.
 
 ## Other useful settings
 
