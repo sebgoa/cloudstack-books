@@ -1,6 +1,6 @@
 * CloudStack Installation from Source for Developers
 
-This book is aimed at CloudStack developers who need to build the code. These instructions are valid on a Ubuntu 12.04 and CentOS 6.4 systems and were tested with the 4.2 release of Apache CloudStack, please adapt them if you are on a different operating system or using a newer/older version of CloudStack. We go through several scenarios:
+This book is aimed at CloudStack developers who need to build the code. These instructions are valid on a Ubuntu 12.04 and CentOS 6.4 systems and were tested with the 4.2 release of Apache CloudStack, please adapt them if you are on a different operating system or using a newer/older version of CloudStack. This book is composed of the following sections:
 
 1. Installation of the prerequisites
 2. Compiling and installation from source
