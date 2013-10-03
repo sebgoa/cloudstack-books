@@ -1,4 +1,4 @@
-* CloudStack Installation from Source for Developers
+# CloudStack Installation from Source for Developers
 
 This book is aimed at CloudStack developers who need to build the code. These instructions are valid on a Ubuntu 12.04 and CentOS 6.4 systems and were tested with the 4.2 release of Apache CloudStack, please adapt them if you are on a different operating system or using a newer/older version of CloudStack. This book is composed of the following sections:
 
@@ -11,11 +11,11 @@ This book is aimed at CloudStack developers who need to build the code. These in
 7. Testing the AWS API interface
 
 
-* Prerequisites
+# Prerequisites
 
 In this section we'll look at installing the dependencies you'll need for Apache CloudStack development.
 
-** On Ubuntu 12.04
+## On Ubuntu 12.04
 
 First update and upgrade your system:
 
@@ -62,7 +62,7 @@ Finally install `mkisofs` with:
 	
     apt-get install genisoimage
 	
-** On centOS 6.4
+## On centOS 6.4
 	
 First update and upgrade your system:
 
@@ -135,7 +135,7 @@ Finally install `mkisofs` with:
     yum -y install genisoimage
 
 	
-* Installing from Source
+# Installing from Source
 
 CloudStack uses git for source version control, if you know little about [git](http://book.git-scm.com/) is a good start. Once you have git setup on your machine, pull the source with:
 
@@ -173,7 +173,7 @@ Replace `localhost` with the IP of your management server if need be.
 
 You can now start configuring a Zone, playing with the API. Of course we did not setup any infrastructure, there is no storage, no hypervisors...etc. However you can run tests using the simulator. The following section shows you how to use the simulator so that you don't have to setup a physical infrastructure.
 
-* Using the Simulator
+# Using the Simulator
 
 CloudStack comes with a simulator based on Python bindings called *Marvin*. Marvin is available in the CloudStack source code or on Pypi.
 With Marvin you can simulate your data center infrastructure by providing CloudStack with a configuration file that defines the number of zones/pods/clusters/hosts, types of storage etc. You can then develop and test the CloudStack management server *as if* it was managing your production infrastructure.
@@ -207,7 +207,7 @@ At this stage log in the CloudStack management server at http://localhost:8080/c
 
 You can now run integration tests, use the API etc...
 
-* Using DevCloud
+# Using DevCloud
 
 The Installing from source section will only get you to the point of runnign the management server, it does not get you any hypervisors. 
 The simulator section gets you a simulated datacenter for testing. With DevCloud you can run at least one hypervisor and add it to your management server the way you would a real physical machine.
@@ -230,7 +230,7 @@ The simulator section gets you a simulated datacenter for testing. With DevCloud
 
     ssh root@192.168.56.10
 
-** Adding DevCloud as an Hypervisor
+## Adding DevCloud as an Hypervisor
 
 Picking up from a clean build:
 
@@ -256,7 +256,7 @@ You can now log in the management server at `http://localhost:8080/client` and s
 
 Do note that the management server is running in your local machine and that DevCloud is used only as a n Hypervisor. You could potentially run the management server within DevCloud as well, or memory granted, run multiple DevClouds.
 
-* Building Packages
+# Building Packages
 
 Working from source is necessary when developing CloudStack. As mentioned earlier this is not primarily intended for users. However some may want to modify the code for their own use and specific infrastructure. The may also need to build their own packages for security reasons and due to network connectivity constraints. This section shows you the gist of how to build packages. We assume that the reader will know how to create a repository to serve this packages. The complete documentation is available on the [website](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.2.0/html/Installation_Guide/sect-source-builddebs.html)
 
@@ -284,7 +284,7 @@ One directory up from the CloudStack root dir you will find:
 
 Of course the community provides a repository for these packages and you can use it instead of building your own packages and putting them in your own repo. Instructions on how to use this community repository are available in the installation book.
 
-* The CloudStack API
+# The CloudStack API
 
 The CloudStack API is a query based API using http that return results in XML or JSON. It is used to implement the default web UI. This API is not a standard like [OGF OCCI](http://www.ogf.org/gf/group_info/view.php?group=occi-wg) or [DMTF CIMI](http://dmtf.org/standards/cloud) but is easy to learn. Mapping exists between the AWS API and the CloudStack API as will be seen in the next section. Recently a Google Compute Engine interface was also developed that maps the GCE REST API to the CloudStack API described here. The API [docs](http://cloudstack.apache.org/docs/api/) are a good start to learn the extent of the API. Multiple clients exist on [github](https://github.com/search?q=cloudstack+client&ref=cmdform) to use this API, you should be able to find one in your favorite language. The reference documentation for the API and changes that might occur from version to version is availble [on-line](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.1.1/html/Developers_Guide/index.html). This short section is aimed at providing a quick summary to give you a base understanding of how to use this API. As a quick start, a good way to explore the API is to navigate the dashboard with a firebug console (or similar developer console) to study the queries.
 
@@ -355,7 +355,7 @@ Finally, build the entire string by joining the baseurl, the request str and the
 All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favorite client of use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods. It has nice auto-completion and help feature as well as an API discovery mechanism since 4.2.
 
 
-* Testing the AWS API interface
+# Testing the AWS API interface
 
 While the native CloudStack API is not a standard, CloudStack provides a AWS EC2 compatible interface. It has the great advantage that existing tools written with EC2 libraries can be re-used against a CloudStack based cloud. In the installation books we described how to run this interface from installing packages. In this section we show you how to compile the interface with `maven` and test it with Python boto module.
 
@@ -383,7 +383,7 @@ With access and secret keys generated for a user you should now be able to use P
 
 Note the new `api_version` number in the connection object and also note that there was no user registration to make like in previous CloudStack releases.
 
-* Conclusions
+# Conclusions
 
 CloudStack is a mostly Java application running with Tomcat and Mysql. It consists of a management server and depending on the hypervisors being used, an agent installed on the hypervisor farm. To complete a Cloud infrastructure however you will also need some Zone wide storage a.k.a Secondary Storage and some Cluster wide storage a.k.a Primary storage. The choice of hypervisor, storage solution and type of Zone (i.e Basic vs. Advanced) will dictate how complex your installation can be. As a quick start, you might want to consider KVM+NFS and a Basic Zone.
 
