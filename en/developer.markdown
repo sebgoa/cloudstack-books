@@ -100,6 +100,10 @@ Remember to set the correct `mysql` password in the CloudStack properties file. 
 
     service mysqld status
 
+If it is not running you can start it start it with:
+
+    service mysqld start
+
 Install `git` to later clone the CloudStack source code:
 
     yum -y install git
