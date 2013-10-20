@@ -61,12 +61,9 @@ First import the required modules:
     >>> import hmac
     >>> import base64
      
-        
-
+       
 Define the endpoint of the Cloud, the command that you want to execute,
 the response type and the keys of the user.
-
-     
 
     >>> baseurl='http://localhost:8080/client/api?'
     >>> request={}
@@ -75,25 +72,19 @@ the response type and the keys of the user.
     >>> request['apikey']='plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg'
     >>> secretkey='VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZsYBkoXkY9b7eq1EhwJaw7FF3akA3KBQ'
       
-        
-
 Build the request string. The key/value pairs are join with the equal
 sign and all the pairs are joined with ampersand.
 
-     
     >>> request_str='&'.join(['='.join([k,urllib.quote_plus(request[k])]) for k in request.keys()])
     >>> request_str
     'apikey=plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg&command=listUsers&response=json'
       
-        
-
 Create the signature request similarly to the request string, but lower
 case everything, sort the keys and replace the plus sign with %20.
 Compute the hmac of the resulting string using the secret key and the
 sha1 algorithm, do a 64 bit encoding, strip the return carriage, and do
 a url encoding:
 
-      
     >>> sig_str='&'.join(['='.join([k.lower(),urllib.quote_plus(request[k].lower().replace('+','%20'))])for k in sorted(request.iterkeys())]) 
     >>> sig_str
     'apikey=plgwjfzk4gys3momtvmjuvg-x-jlwlnfauj9gabbbf9edm-kaymmailqzzq1elzlyq_u38zcm0bewzgudp66mg&command=listusers&response=json'
@@ -111,28 +102,20 @@ a url encoding:
     'TTpdDq/7j/J58XCRHomKoQXEQds='
     >>> sig=urllib.quote_plus(base64.encodestring(hmac.new(secretkey,sig_str,hashlib.sha1).digest()).strip())
       
-        
-
 Finally, build the entire string and do an http GET:
-
       
     >>> req=baseurl+request_str+'&signature='+sig
     >>> req
     'http://localhost:8080/client/api?apikey=plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg&command=listUsers&response=json&signature=TTpdDq%2F7j%2FJ58XCRHomKoQXEQds%3D'
     >>> res=urllib2.urlopen(req)
 
-        
-
 In this particular example, the response is in json format. The first
 key is *listusersresponse* which contains *count* and a list of the
 users in *user*
 
-
     >>> res.read()
     '{ "listusersresponse" : { "count":3 ,"user" : [  {"id":"7ed6d5da-93b2-4545-a502-23d20b48ef2a","username":"admin","firstname":"admin","lastname":"cloud","created":"2012-07-05T12:18:27-0700","state":"enabled","account":"admin","accounttype":1,"domainid":"8a111e58-e155-4482-93ce-84efff3c7c77","domain":"ROOT","apikey":"plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg","secretkey":"VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZsYBkoXkY9b7eq1EhwJaw7FF3akA3KBQ","accountid":"7548ac03-af1d-4c1c-9064-2f3e2c0eda0d"}, {"id":"1fea6418-5576-4989-a21e-4790787bbee3","username":"runseb","firstname":"foobar","lastname":"goa","email":"joe@smith.com","created":"2013-04-10T16:52:06-0700","state":"enabled","account":"admin","accounttype":1,"domainid":"8a111e58-e155-4482-93ce-84efff3c7c77","domain":"ROOT","apikey":"Xhsb3MewjJQaXXMszRcLvQI9_NPy_UcbDj1QXikkVbDC9MDSPwWdtZ1bUY1H7JBEYTtDDLY3yuchCeW778GkBA","secretkey":"gIsgmi8C5YwxMHjX5o51pSe0kqs6JnKriw0jJBLceY5bgnfzKjL4aM6ctJX-i1ddQIHJLbLJDK9MRzsKk6xZ_w","accountid":"7548ac03-af1d-4c1c-9064-2f3e2c0eda0d"}, {"id":"52f65396-183c-4473-883f-a37e7bb93967","username":"toto","firstname":"john","lastname":"smith","email":"john@smith.com","created":"2013-04-23T04:27:22-0700","state":"enabled","account":"admin","accounttype":1,"domainid":"8a111e58-e155-4482-93ce-84efff3c7c77","domain":"ROOT","apikey":"THaA6fFWS_OmvU8od201omxFC8yKNL_Hc5ZCS77LFCJsRzSx48JyZucbUul6XYbEg-ZyXMl_wuEpECzK-wKnow","secretkey":"O5ywpqJorAsEBKR_5jEvrtGHfWL1Y_j1E4Z_iCr8OKCYcsPIOdVcfzjJQ8YqK0a5EzSpoRrjOFiLsG0hQrYnDA","accountid":"7548ac03-af1d-4c1c-9064-2f3e2c0eda0d"} ] } }'
       
-        
-
 To epxlore further the CloudStack API, use CloudMonkey and/or read the API
 [documentation](http://cloudstack.apache.org/apidocumentation), which
 contains the entire parameters list for each API call.
@@ -1368,21 +1351,18 @@ therefore you will need libcloud installed as well. See the previous
 chapter to setup libcloud. With Saltcloud installed and in your path,
 you need to define a Cloud provider in *\~/.saltcloud/cloud*. For
 example:
-
         
-        providers:
-          exoscale:
-            apikey: <your api key> 
-            secretkey: <your secret key>
-            host: api.exoscale.ch
-            path: /compute
-            securitygroup: default
-            user: root
-            private_key: ~/.ssh/id_rsa
-            provider: cloudstack
+    providers:
+      exoscale:
+        apikey: <your api key> 
+        secretkey: <your secret key>
+        host: api.exoscale.ch
+        path: /compute
+        securitygroup: default
+        user: root
+        private_key: ~/.ssh/id_rsa
+        provider: cloudstack
         
-            
-
 The apikey, secretkey, host, path and provider keys are mandatory. The
 securitygroup key will specify which security group to use when starting
 the instances in that cloud. The user will be the username used to
@@ -1391,7 +1371,7 @@ use. Note that the optional parameter are specific to the Cloud that
 this was tested on. Cloud in advanced zones especially will need a
 different setup.
 
-> **Warning**
+> Warning
 >
 > Saltcloud used libcloud. Support for advanced zones in libcloud is
 > still experimental, therefore using SaltCloud in advanced zone will
@@ -1401,11 +1381,10 @@ Once a provider is defined, we can start using saltcloud to list the
 zones, the service offerings and the templates available on that cloud
 provider. So far nothing more than what libcloud provides. For example:
 
-        $salt-cloud –list-locations exoscale
-        $salt-cloud –list-images exoscale
-        $salt-cloud –list-sizes exoscale
+    $salt-cloud –list-locations exoscale
+    $salt-cloud –list-images exoscale
+    $salt-cloud –list-sizes exoscale
             
-
 To start creating instances and configuring them with Salt, we need to
 define node profiles in *\~/.saltcloud/config*. To illustrate two
 different profiles we show a Salt Master and a Minion. The Master would
@@ -1415,49 +1394,70 @@ groups, one would also need to specify which keypair to use, where to
 listen for ssh connections and of course you would need to define the
 provider (e.g exoscale in our case, defined above). Below if the node
 profile for a Salt Master deployed in the Cloud:
-
         
-        ubuntu-exoscale-master:
-            provider: exoscale
-            image: 1d16c78d-268f-47d0-be0c-b80d31e765d2 
-            size: b6cd1ff5-3a2f-4e9d-a4d1-8988c1191fe8 
-            ssh_interface: public
-            ssh_username: root
-            keypair: exoscale
-            make_master: True
-            master:
-               user: root
-               interface: 0.0.0.0
+    ubuntu-exoscale-master:
+        provider: exoscale
+        image: 1d16c78d-268f-47d0-be0c-b80d31e765d2 
+        size: b6cd1ff5-3a2f-4e9d-a4d1-8988c1191fe8 
+        ssh_interface: public
+        ssh_username: root
+        keypair: exoscale
+        make_master: True
+        master:
+           user: root
+           interface: 0.0.0.0
         
-            
-
 The master key shows which user to use and what interface, the
 make\_master key if set to true will boostrap this node as a Salt
 Master. To create it on our cloud provider simply enter:
 
-        $salt-cloud –p ubuntu-exoscale-master mymaster
+    $salt-cloud –p ubuntu-exoscale-master mymaster
             
-
 Where *mymaster* is going to be the instance name. To create a minion,
 add a minion node profile in the config file:
-
         
-        ubuntu-exoscale-minion:
-            provider: exoscale
-            image: 1d16c78d-268f-47d0-be0c-b80d31e765d2
-            size: b6cd1ff5-3a2f-4e9d-a4d1-8988c1191fe8
-            ssh_interface: public
-            ssh_username: root
-            keypair: exoscale
+    ubuntu-exoscale-minion:
+        provider: exoscale
+        image: 1d16c78d-268f-47d0-be0c-b80d31e765d2
+        size: b6cd1ff5-3a2f-4e9d-a4d1-8988c1191fe8
+        ssh_interface: public
+        ssh_username: root
+        keypair: exoscale
         
-            
-
 you would then start it with:
 
-        $salt-cloud –p ubuntu-exoscale-minion myminion
+    $salt-cloud –p ubuntu-exoscale-minion myminion
             
+On the master you will need to have port 4505 and 4506 opened, this is best done in basic zone using security groups. Once this security group is properly setup the minions will be able to contact the master. You will then accept the keys from the minion and be able to talk to them from your Salt master.
 
-> **Note**
+    root@mymaster11:~# salt-key -L
+    Accepted Keys:
+    minion001
+    minion002
+    Unaccepted Keys:
+    minion003
+    Rejected Keys:
+    root@mymaster11:~# salt-key -A
+    The following keys are going to be accepted:
+    Unaccepted Keys:
+    minion003
+    Proceed? [n/Y] Y
+    Key for minion minion003 accepted.
+    root@mymaster11:~# salt '*' test.ping
+    minion002:
+       True
+    minion001:
+       True
+    root@mymaster11:~# salt '*' test.ping
+    minion003:
+        True
+    minion002:
+        True
+    minion001:
+        True
+
+
+> Note
 >
 > Saltcloud is still in an early phase of development and has little
 > concept of dependencies between nodes. Therefore in the example
