@@ -20,7 +20,7 @@ clients-pdf:
 clients-epub: en/title.png en/title.1.txt en/clients.markdown
 	$(EPUB_BUILDER) $(EPUB_BUILDER_FLAGS) $^ -o ./en/$(BOOK_FILE_NAME_1).epub
 
-installation-pdf:
+installation-pdf: en/title.png en/title.2.txt en/installation.markdown
 	cd en && $(PDF_BUILDER) $(PDF_BUILDER_FLAGS) $(SOURCE_FILE_NAME_2) -o $(BOOK_FILE_NAME_2).pdf
 
 installation-epub: en/title.png en/title.2.txt en/installation.markdown
