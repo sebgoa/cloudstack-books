@@ -1,10 +1,17 @@
 About
 =====
 
-The Little CloudStack Books
+The Little CloudStack Books, a set of books for Apache CloudStack users and developers.
+"A Clients and Wrappers" book that covers some of the main tools to use with a cloud.
+"A developer" book to work with the source, the simulator and the sandbox
+"An installation" book written for end users and focusing on packages
+
+These books are aimed at being step by step recipes, they were written as I went through every tool and installation process.
+
+The books were written by [Sebastien Goasguen](http://sebgoa.blogspot.com)
 
 Installation
-========
+============
 
 For OS X, [BasicTeX](http://www.tug.org/mactex/morepackages.html) is recommended.
 
@@ -24,14 +31,14 @@ Then a few missing .sty files might need to be installed:
     $ sudo tlmgr install preprint
 
 To build the .pdf files:
-=======
+========================
 
     $ make clients-pdf
     $ make installation-pdf
 
 
 To build the .epub files:
-=======
+========================
 
     $ make clients-epub
     $ make installation-epub
@@ -45,10 +52,13 @@ All generated files will be in the en directory.
 License
 =======
 
-The book is licensed under the Apache Software Foundation v2 license
+The book is freely distributed under the [Attribution-NonCommercial 3.0 Unported license](<http://creativecommons.org/licenses/by-nc/3.0/legalcode>).
+
 
 Acknowledgements
 ================
+
+"Apache", "CloudStack", "Apache CloudStack", the Apache CloudStack logo, the Apache CloudStack Cloud Monkey logo and the Apache feather logos are registered trademarks or trademarks of The Apache Software Foundation.
 
 The format of this book was inspired by The Little MongoDB Book by Karl Seguin [@karlseguin](http://twitter.com/karlseguin)
 
