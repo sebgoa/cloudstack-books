@@ -16,36 +16,29 @@ You can see the full text of the license at:
 
 About The Author
 ----------------
-Sebastien Goasguen is an Apache CloudStack committer and member of the CloudStack Project Management Committee (PMC). He will never call himself an expert or a developer but is a decent Python programmer. He is currently active in Apache Libcloud and SaltStack salt-cloud projects to bring better support for CloudStack. He blogs regularly about cloud technologies and spends lots of time testing and writing about his experiences. Prior to working actively on CloudStack he had a life as an academic authored over seventy international publications on grid computing, high performance computing, electromagnetics, nanoelectronics and of course cloud computing he also taught courses on distributed computing, network programming, ethical hacking and cloud.
+Sebastien Goasguen is an Apache CloudStack committer and member of the CloudStack Project Management Committee (PMC). His day job is to be a Senior Open Source Solutions Architect for the Open Source Business Office at Citrix. He will never call himself an expert or a developer but is a decent Python programmer. He is currently active in Apache Libcloud and SaltStack salt-cloud projects to bring better support for CloudStack. He blogs regularly about cloud technologies and spends lots of time testing and writing about his experiences. Prior to working actively on CloudStack he had a life as an academic, he authored over seventy international publications on grid computing, high performance computing, electromagnetics, nanoelectronics and of course cloud computing. He also taught courses on distributed computing, network programming, ethical hacking and cloud.
 
 His blog can be found at http://sebgoa.blogspot.com and he tweets via @sebgoa. You can find him on github at https://github.com/runseb
 
 Introduction
 ------------
 Clients and high level Wrappers are critical to the ease of use of any API, even more
-so Cloud APIs. In this book we present the basis of the CloudStack API and introduce some low level clients before diving into more advanced wrappers.
+so Cloud APIs. In this book we present the basics of the CloudStack API and introduce some low level clients before diving into more advanced wrappers.
 The first chapter is dedicated to clients and the second chapter to wrappers or what I considered to be high level tools built on top of a CloudStack client.
 
 In the first chapter, we start by illustrating how to sign requests with the native API -in the sake of completeness- and
-because it is a very nice exercise for beginners. We then introduce
-CloudMonkey the CloudStack CLI and shell which boasts a 100% coverage of
-the API. While jclouds is a java library, it can also be used as a cli
-or interactive shell, we present jclouds-cli to contrast it to
-CloudMonkey and introduce jclouds. Apache libcloud is a Python based API
-wrapper, once installed, a developer can use libcloud to talk to
-multiple cloud providers and cloud APIs, it serves a similar role as
-jclouds but in Python. We present Boto, the well-known Python Amazon Web Service
-interface, and show how it can be used with a CloudStack cloud running the AWS interface.
+because it is a very nice exercise for beginners. We then introduce CloudMonkey the CloudStack CLI and shell which boasts a 100% coverage of
+the API. Then jclouds is discussed. While jclouds is a java library, it can also be used as a cli or interactive shell, we present jclouds-cli to contrast it to
+CloudMonkey and introduce jclouds. Apache libcloud is a Python module that provides a common API on top of many Cloud providers API, once installed, a developer can use libcloud to talk to multiple cloud providers and cloud APIs, it serves a similar role as jclouds but in Python. Finally, we present Boto, the well-known Python Amazon Web Service interface, and show how it can be used with a CloudStack cloud running the AWS interface.
 
 In the second chapter we introduce several high level wrappers for configuration management and automated provisioning.
 The presentation of these wrappers aim to answer the question "I have a cloud now what ?". Starting and stoping virtual machines is the core functionality of a cloud, 
-but it empowers users to do much more. Automation is the key of today's IT infrastructure. The wrappers presented here show you how you can automate configuration management and automate provisioning of infrastructure that lies within your cloud. We introduce Salt-cloud for Saltstack, a Python alternative to the well know Chef and Puppet systems. We then introduce the knife CloudStack plugin for Chef and show you easy it is to deploy machines in a cloud and configure them, we finish with another Apache project basd on jclouds: Whirr. Apache Whirr simplifies the on-demand provisioning
-of clusters of virtual machine instances, hence it allows you to easily provision big data infrastructure on-demand, whether you need a HADOOP cluster, an elasticsearch cluster or even a Cassandra cluster.
+but it empowers users to do much more. Automation is the key of today's IT infrastructure. The wrappers presented here show you how you can automate configuration management and automate provisioning of infrastructures that lie within your cloud. We introduce Salt-cloud for Saltstack, a Python alternative to the well known Chef and Puppet systems. We then introduce the knife CloudStack plugin for Chef and show you how easy it is to deploy machines in a cloud and configure them, we finish with another Apache project based on jclouds: Whirr. Apache Whirr simplifies the on-demand provisioning of clusters of virtual machine instances, hence it allows you to easily provision big data infrastructure on-demand, whether you need a *HADOOP* cluster, an *Elasticsearch* cluster or even a *Cassandra* cluster.
 
 The CloudStack API
 ==================
 All functionalities of the CloudStack data center orchestrator are exposed
-via an API server. Github currently has over fifteen clients for this
+via an API server. Github currently has over twenty clients for this
 API, in various languages. In this section we introduce this API and the
 signing mechanism. The follow on sections will introduce clients that
 already contain a signing method. The signing process is only
@@ -53,16 +46,16 @@ highlighted for completeness.
 
 Basics of the API
 -----------------
-The CloudStack API is a query based API using http that return results in XML or JSON. It is used to implement the default web UI. This API is not a standard like [OGF OCCI](http://www.ogf.org/gf/group_info/view.php?group=occi-wg) or [DMTF CIMI](http://dmtf.org/standards/cloud) but is easy to learn. Mapping exists between the AWS API and the CloudStack API as will be seen in the next section. Recently a Google Compute Engine interface was also developed that maps the GCE REST API to the CloudStack API described here. The API [docs](http://cloudstack.apache.org/docs/api/) are a good start to learn the extent of the API. Multiple clients exist on [github](https://github.com/search?q=cloudstack+client&ref=cmdform) to use this API, you should be able to find one in your favorite language. The reference documentation for the API and changes that might occur from version to version is availble [on-line](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.1.1/html/Developers_Guide/index.html). This short section is aimed at providing a quick summary to give you a base understanding of how to use this API. As a quick start, a good way to explore the API is to navigate the dashboard with a firebug console (or similar developer console) to study the queries.
+The CloudStack API is a query based API using http which returns results in XML or JSON. It is used to implement the default web UI. This API is not a standard like [OGF OCCI](http://www.ogf.org/gf/group_info/view.php?group=occi-wg) or [DMTF CIMI](http://dmtf.org/standards/cloud) but is easy to learn. A mapping exists between the AWS API and the CloudStack API as will be seen in the next section. Recently a Google Compute Engine interface was also developed that maps the GCE REST API to the CloudStack API described here. The API [docs](http://cloudstack.apache.org/docs/api/) are a good start to learn the extent of the API. Multiple clients exist on [github](https://github.com/search?q=cloudstack+client&ref=cmdform) to use this API, you should be able to find one in your favorite language. The reference documentation for the API and changes that might occur from version to version is availble [on-line](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.1.1/html/Developers_Guide/index.html). This short section is aimed at providing a quick summary to give you a base understanding of how to use this API. As a quick start, a good way to explore the API is to navigate the dashboard with a firebug console (or similar developer console) to study the queries.
 
-In a succint statement, the CloudStack query API can be used via http GET requests made against your cloud endpoint (e.g http://localhost:8080/client/api). The API name is passed using the `command` key and the various parameters for this API call are passed as key value pairs. The request is signed using the access key and secret key of the user making the call. Some calls are synchronous while some are asynchronous, this is documented in the API [docs](http://cloudstack.apache.org/docs/api/). Asynchronous calls return a `jobid`, the status and result of a job can be queried with the `queryAsyncJobResult` call. Let's get started and give an example of calling the `listUsers` API in Python.
+In a succint statement, the CloudStack query API can be used via http GET requests made against your cloud endpoint (e.g http://localhost:8080/client/api). The API name is passed using the `command` key and the various parameters for this API call are passed as key value pairs. The request is signed using the secret key of the user making the call. Some calls are synchronous while some are asynchronous, this is documented in the API [docs](http://cloudstack.apache.org/docs/api/). Asynchronous calls return a `jobid`, the status and result of a job can be queried with the `queryAsyncJobResult` call. Let's get started and give an example of calling the `listUsers` API in Python.
 
-First you will need to generate keys to make requests. Going through the dashboard, go under `Accounts` select the appropriate account then click on `Show Users` select the intended users and generate keys using the `Generate Keys` icon. You will see an `API Key` and `Secret Key` field being generated. The keys will be of the form:
+First you will need to generate keys to make requests. Going through the dashboard, go under `Accounts` select the appropriate account then click on `Show Users` select the intended user and generate keys using the `Generate Keys` icon. You will see an `API Key` and `Secret Key` field being generated. The keys will be of the form:
 
     API Key : XzAz0uC0t888gOzPs3HchY72qwDc7pUPIO8LxC-VkIHo4C3fvbEBY_Ccj8fo3mBapN5qRDg_0_EbGdbxi8oy1A
 	Secret Key: zmBOXAXPlfb-LIygOxUVblAbz7E47eukDS_0JYUxP3JAmknOYo56T0R-AcM7rK7SMyo11Y6XW22gyuXzOdiybQ
 
-Open a Python shell and import the basic modules necessary to make the request. Do note that this request could be made many different ways, this is just a low level example. The `urllib*` modules are used to make the http request and do url encoding. The `hashlib` module gives us the sha1 hash function. It used to geenrate the `hmac` (Keyed Hashing for Message Authentication) using the secretkey. The result is encoded using the `base64` module.
+Open a Python shell and import the basic modules necessary to make the request. Do note that this request could be made many different ways, this is just a low level example. The `urllib*` modules are used to make the http request and do url encoding. The `hashlib` module gives us the sha1 hash function. It is used to generate the `hmac` (Keyed Hashing for Message Authentication) using the secretkey. The result is encoded using the `base64` module.
 
     $python
     Python 2.7.3 (default, Nov 17 2012, 19:54:34) 
@@ -119,14 +112,14 @@ Finally, build the entire string by joining the baseurl, the request str and the
 	   "secretkey":"VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZshwJaw7FF3akA3KBQ",
 	   "accountid":"7548ac03-af1d-4c1c-9064-2f3e2c0eda0d"}]}}
 													   
-All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favorite client or use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods. It has nice auto-completion and help feature as well as an API discovery mechanism since 4.2.
+All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favorite client or use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods. It has nice auto-completion, history and help features as well as an API discovery mechanism since 4.2.
 
 CloudMonkey
 ===========
 CloudMonkey is the CloudStack Command Line Interface (CLI). It is written
 in Python. CloudMonkey can be used both as an interactive shell and as a
 command line tool which simplifies CloudStack configuration and management.
-It can be used with CloudStack CloudStack 4.0-incubating and above
+It can be used with CloudStack 4.0-incubating and above
 
 
 Installing CloudMonkey
@@ -135,12 +128,12 @@ CloudMonkey is dependent on *readline, pygments, prettytable*, when
 installing from source you will need to resolve those dependencies.
 Using the cheese shop, the dependencies will be automatically installed.
 
-There are three ways to get CloudMonkey. Via the official CloudStack source
+There are two ways to get CloudMonkey. Via the official CloudStack source
 releases or via a community maintained distribution at [the cheese
-shop](http://pypi.python.org/pypi/cloudmonkey/). Developers can also get
-it directly from the git repository in *tools/cli/*.
+shop](http://pypi.python.org/pypi/cloudmonkey/). CloudMonkey now lives within its own repository but it used to be part of the CloudStack release. Developers could get
+it directly from the CloudStack git repository in *tools/cli/*. Now, it is better to use the CloudMonkey specific repository.
 
--   Via the official Apache CloudStack releases as well as the git
+-   Via the official Apache CloudStack-CloudMonkey git
     repository.
 
             
@@ -210,11 +203,9 @@ API Discovery
 > discovery service is enabled. CloudMonkey will discover automatically
 > the api calls available on the management server. The sync command in
 > CloudMonkey pulls a list of apis which are accessible to your user
-> role, along with help docs etc. and stores them in
-> \~/.cloudmonkey/cache. This allows cloudmonkey to be adaptable to
+> role. This allows cloudmonkey to be adaptable to
 > changes in mgmt server, so in case the sysadmin enables a plugin such
-> as Nicira NVP for that user role, the users can get those changes. New
-> verbs and grammar (DSL) rules are created on the fly.
+> as Nicira NVP for that user role, the users can get those changes.
 
 To discover the APIs available do:
 
@@ -261,7 +252,6 @@ twice. You will see all actions available for that verb
     account                diskoffering           loadbalancerrule       portforwardingrule     snapshot               tags                   vpc
     ...
         
-
 Picking one action and entering a space plus the tab key, you will
 obtain the list of parameters for that specific api call.
 
@@ -302,7 +292,6 @@ Starting a Virtual Machine instance with CloudMonkey
 ----------------------------------------------------
 To start a virtual machine instance we will use the *deploy
 virtualmachine* call.
-
 
     cloudmonkey>deploy virtualmachine -h
     Creates and automatically starts a virtual machine based on a service offering, disk offering, and template.
@@ -530,8 +519,7 @@ To start an instance we can check the syntax of *jclouds node create*
 
 We need to define the name of a group and give the number of instance
 that we want to start. Plus the hardware and image id. In terms of
-hardware, we want to save money so we are going to use the smallest
-possible hardware and for image we give a uuid from the previous list.
+hardware, we are going to use the smallest possible hardware and for image we give a uuid from the previous list.
 
     $ jclouds node list
     [id]                                 [location]                           [hardware]                           [group] [status]
@@ -548,12 +536,12 @@ possible hardware and for image we give a uuid from the previous list.
         
 
 With this short intro, you are well on your way to using jclouds-cli.
-Check out the interactive shell, the blobstore and the chef facility to automate VM configuration.
+Check out the interactive shell, the blobstore and the chef facility to automate VM configuration. Remember that jclouds is also and actually foremost a java library that you can use to write other applications.
 
 Apache Libcloud
 ===============
-There are many tools available to interface with the CloudStack API. Apache
-Libcloud is one of those. In this section we provide a basic example of
+There are many tools available to interface with the CloudStack API, we just saw jClouds. Apache
+Libcloud is another one, but this time Python based. In this section we provide a basic example of
 how to use Libcloud with CloudStack. It assumes that you have access to a
 CloudStack endpoint and that you have the API access key and secret key of
 a user.
@@ -579,13 +567,11 @@ You should see the following output:
     Successfully installed apache-libcloud
     Cleaning up...
         
-
 Developers will want to clone the repository, for example from the
 github mirror:
 
     git clone https://github.com/apache/libcloud.git
         
-
 To install libcloud from the cloned repo, simply do the following from
 within the clone repository directory:
 
@@ -613,8 +599,8 @@ driver.
 
 
 Then, using your keys and endpoint, create a connection object. Note
-that this is a localtest and thus not secured. If you use a CloudStackion
-public cloud, make sure to use SSL properly.
+that this is a local test and thus not secured. If you use a CloudStack
+public cloud, make sure to use SSL properly (i.e `secure=True`).
 
     >>> apikey='plgWJfZK4gyS3mlZLYq_u38zCm0bewzGUdP66mg'
     >>> secretkey='VDaACYb0LV9eNjeq1EhwJaw7FF3akA3KBQ'
@@ -635,7 +621,6 @@ list such things as the templates (i.e images), the service offerings
     >>> images=conn.list_images()
     >>> offerings=conn.list_sizes()
 
-
 The `create_node` method will take an instance name, a template and an
 instance type as arguments. It will return an instance of a
 *CloudStackNode* that has additional extensions methods, such as
@@ -651,24 +636,25 @@ instance type as arguments. It will return an instance of a
 Keypairs and Security Groups
 ----------------------------
 I recently added support for keypair management in libcloud. For
-instace, given a conn object obtained from the previous interactive
+instance, given a conn object obtained from the previous interactive
 session:
 
     conn.ex_list_keypairs()
     conn.ex_create_keypair(name='foobar')
-    conn.ex_list_keypairs()
     conn.ex_delete_keypair(name='foobar')        
 
 Management of security groups was also added. Below we show how to list,
 create and delete security groups. As well as add an ingree rule to open
 port 22 to the world. Both keypair and security groups are key for
-access to a CloudStack Basic zone like Exoscale.
+access to a CloudStack Basic zone like [Exoscale](http://www.exoscale.ch).
 
     conn.ex_list_security_groups()
     conn.ex_create_security_group(name='libcloud')
     conn.ex_authorize_security_group_ingress(securitygroupname='llibcloud',protocol='TCP',startport=22,cidrlist='0.0.0.0/0')
     conn.ex_delete_security_group('llibcloud')
-       
+
+Development of the CloudStack driver in Libcloud is very active, there is also support for advanced zone via calls to do SourceNAT and StaticNAT.
+
 Multiple Clouds
 ---------------
 One of the interesting use cases of Libcloud is that you can use
@@ -676,7 +662,7 @@ multiple Cloud Providers, such as AWS, Rackspace, OpenNebula, vCloud and
 so on. You can then create Driver instances to each of these clouds and
 create your own multi cloud application. In the example below we
 instantiate to libcloud CloudStack driver, one on
-[Exoscale](http://exoscale.ch) and the other on one
+[Exoscale](http://exoscale.ch) and the other one on
 [Ikoula](http://ikoula.com).
      
     import libcloud.security as sec
@@ -726,9 +712,8 @@ resiliency to your overall infrastructure.
 Pyton Boto
 ==========
 There are many tools available to interface with a AWS compatible API.
-In this section we provide a few examples that users of CloudStack can
-build upon.
-
+In this section we provide a short example that users of CloudStack can
+build upon using the AWS interface to CloudStack.
 Boto Examples
 -------------
 Boto is one of them. It is a Python package available at
@@ -773,25 +758,24 @@ own and update the endpoint.
 
 With boto you can also interact with other AWS services like S3. CloudStack has an S3 tech preview but it
 is backed by a standard NFS server and therefore is not a true scalable distributed block store. To provide an S3
-service in your Cloud  I recommend to use other software like RiakCS, Ceph radosgw or Glusterfs S3 interface. These
+service in your Cloud I recommend to use other software like RiakCS, Ceph radosgw or Glusterfs S3 interface. These
 systems handle large scale, chunking and replication.
 
 Wrappers
 ========
 In this paragraph we introduce several CloudStack *wrappers*. These tools
-are using client libraries presented in the previous chapter and add
+are using client libraries presented in the previous chapter (or their own built-in request mechanisms) and add
 additional functionality that involve some high-level orchestration. For
 instance *knife-cloudstack* uses the power of
 [Chef](http://opscode.com), the configuration management system, to
 seamlessly bootstrap instances running in a CloudStack cloud. Apache
 [Whirr](http://whirr.apache.org) uses
 [jclouds](http://jclouds.incubator.apache.org) to boostrap
-[Hadoop](http://hadoop.apache.org) clusters in the cloud and pallet does
-the same thing but using the clojure language.
+[Hadoop](http://hadoop.apache.org) clusters in the cloud and [SaltStack](http://saltstack.com) does configuration management in the Cloud using Apache libcloud.
 
 Knife CloudStack
 =============
-Knife is a command line utility for Chef, the configuration management system.
+Knife is a command line utility for Chef, the configuration management system from OpsCode.
 
 Install, Configure and Feel
 ---------------------------
@@ -821,10 +805,10 @@ cloned the knife-cloudstack repo do:
       Version: 0.0.14
       File: knife-cloudstack-0.0.14.gem
     $ gem install knife-cloudstack-0.0.14.gem 
-    Successfully installed knife-cloudstack-0.0.14
-    1 gem installed
-    Installing ri documentation for knife-cloudstack-0.0.14...
-    Installing RDoc documentation for knife-cloudstack-0.0.14...
+      Successfully installed knife-cloudstack-0.0.14
+      1 gem installed
+      Installing ri documentation for knife-cloudstack-0.0.14...
+      Installing RDoc documentation for knife-cloudstack-0.0.14...
             
 You will then need to define your CloudStack endpoint and your credentials
 in a *knife.rb* file like so:
@@ -851,7 +835,6 @@ To list all the *knife-cloudstack* commands available just enter *knife
 cs* at the prompt. You will see:
 
     $ knife cs
-    FATAL: Cannot find sub command for: 'cs'
     Available cs subcommands: (for details, knife SUB-COMMAND --help)
 
     ** CS COMMANDS **
@@ -867,7 +850,6 @@ cs* at the prompt. You will see:
     knife cs template create NAME (options)
     ...
             
-
 > **Note**
 >
 > If you only have user privileges on the Cloud you are using, as
@@ -936,7 +918,7 @@ In order to manage instances *knife* has several commands:
 And of course to create an instance *knife cs server create*
 
 Knife will automatically allocate a Public IP address and associate it
-with your running instance. If you additionally pass port forwarding
+with your running instance. If you additionally pass some port forwarding
 rules and firewall rules it will set those up. You need to specify an
 instance type, from the list returned by *knife cs service list* as well
 as a template, from the list returned by *knife cs template list*. The
@@ -970,7 +952,7 @@ Chef, the easiest is to use [Hosted
 Chef](http://www.opscode.com/hosted-chef/). There is some great
 documentation on
 [how](https://learnchef.opscode.com/quickstart/chef-repo/) to do it. The
-basics concept is that you will download or create cookbooks locally and
+basic concept is that you will download or create cookbooks locally and
 publish them to your own hosted Chef server.
 
 Using Knife with Hosted-Chef
@@ -1115,15 +1097,6 @@ specify an identity file as I will retrieve the ssh password with the
 >
 >                     
 
-With the basics of Chef configuration and usage covered, as well as the
-basic examples of using *knife cloudstack* to provision and configure
-instances we can now move on to the interesting case of configuring a
-group of instances and handling basic dependencies between those
-machines. The typical use case is when machines need to be provisioned
-according to a schedule so that information about one instance can be
-passed to another one. With *knife cloudstack* this is possible by using
-*stacks*.
-
 Salt
 ====
 [Salt](http://saltstack.com) is a configuration management system
@@ -1132,11 +1105,11 @@ Its concept is similar with a master node holding states called *salt
 states (SLS)* and minions that get their configuration from the master.
 A nice difference with Chef and Puppet is that Salt is also a remote
 execution engine and can be used to execute commands on the minions by
-specifying a set of targets. In this chapter we introduce Salt and dive
+specifying a set of targets. In this chapter we dive straight
 into [SaltCloud](http://saltcloud.org), an open source software to
 provision *Salt* masters and minions in the Cloud. *SaltCloud* can be
 looked at as an alternative to *knife-cs* but certainly with less
-functionality.
+functionality. In this short walkthrough we intend to boostrap a Salt master (equivalent to a Chef server) in the cloud and then add minions that will get their configuration from the master.
 
 SaltCloud installation and usage.
 ---------------------------------
@@ -1177,9 +1150,23 @@ Once a provider is defined, we can start using saltcloud to list the
 zones, the service offerings and the templates available on that cloud
 provider. So far nothing more than what libcloud provides. For example:
 
-    $salt-cloud –list-locations exoscale
-    $salt-cloud –list-images exoscale
-    $salt-cloud –list-sizes exoscale
+    #salt-cloud –list-locations exoscale
+	[INFO    ] salt-cloud starting
+	exoscale:
+	    ----------
+	    cloudstack:
+	        ----------
+	        CH-GV2:
+	            ----------
+	            country:
+	                AU
+	            driver:
+	            id:
+	                1128bd56-b4d9-4ac6-a7b9-c715b187ce11
+	            name:
+	                CH-GV2
+    #salt-cloud –list-images exoscale
+    #salt-cloud –list-sizes exoscale
             
 To start creating instances and configuring them with Salt, we need to
 define node profiles in *\~/.saltcloud/config*. To illustrate two
@@ -1219,12 +1206,14 @@ add a minion node profile in the config file:
         ssh_interface: public
         ssh_username: root
         keypair: exoscale
+	    minion:
+	      master: W.X.Y.Z
         
 you would then start it with:
 
     $salt-cloud –p ubuntu-exoscale-minion myminion
             
-On the master you will need to have port 4505 and 4506 opened, this is best done in basic zone using security groups. Once this security group is properly setup the minions will be able to contact the master. You will then accept the keys from the minion and be able to talk to them from your Salt master.
+The W.X.Y.Z IP address above should be the IP address of the master that was deployed previously. On the master you will need to have port 4505 and 4506 opened, this is best done in basic zone using security groups. Once this security group is properly setup the minions will be able to contact the master. You will then accept the keys from the minion and be able to talk to them from your Salt master.
 
     root@mymaster11:~# salt-key -L
     Accepted Keys:
@@ -1251,16 +1240,6 @@ On the master you will need to have port 4505 and 4506 opened, this is best done
         True
     minion001:
         True
-
-
-> Note
->
-> Saltcloud is still in an early phase of development and has little
-> concept of dependencies between nodes. Therefore in the example
-> described above the minion would not know where the master is, this
-> would need to be resolved by hand by passing the IP of the master in
-> the config profile of the minion. However this may not be a problem if
-> the master is already existent and reachable by the instances.
 
 Apache Whirr
 ============
