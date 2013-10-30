@@ -1452,7 +1452,7 @@ Create a test input file and put in the hadoop file system:
     Found 1 items
     -rw-r--r--   3 sebastiengoasguen supergroup         34 2013-06-21 20:17 /user/sebastiengoasguen/input/foobar            
 
-Define the map-reduce environment. Note that this default Cloudera
+Define the map-reduce environment. Note that the default Cloudera HADOOP
 distribution installation uses MRv1. To use Yarn one would have to edit
 the hadoop.properties file.
 
@@ -1489,4 +1489,4 @@ And you can finally check the output:
             
 Conclusions
 ===========
-The CloudStack API is very rich and easy to use. You can write your own client by following the section on how to sign requests, or you can use an existing client in the language of your choice. Well known libraries developed by the community work well with CloudStack, such as Apache libcloud and Apache jclouds. Configuration management systems also have plugins to work transparently with CloudStack, in this little book we presented SaltStack and Knife-cs. Finally, going a bit beyond simple clients we presented Apache Whirr that allows you to create Hadoop clusters on-demand (e.g elasticsearch, cassandra also work). Take your pick and write your applications on top of CloudStack using one of those tools. Based on these tools you will be able to deploy infrastructure easily, quickly and in a reproducible manner. Lately CloudStack has seen the number of tools grow, just today I learned about a Fluentd plugin and last week a Cloudfoundry BOSH interface was released. I also committed a straightforward dynamic inventory script for Ansible and a tweet just flew by about a vagrant-cloudstack plugin. The list goes on, pick what suits you and answers your need, then have fun.
+The CloudStack API is very rich and easy to use. You can write your own client by following the section on how to sign requests, or you can use an existing client in the language of your choice. Well known libraries developed by the community work well with CloudStack, such as Apache libcloud and Apache jclouds. Configuration management systems also have plugins to work transparently with CloudStack, in this little book we presented SaltStack and Knife-cs. Finally, going a bit beyond simple clients we presented Apache Whirr that allows you to create Hadoop clusters on-demand (e.g elasticsearch, cassandra also work). Take your pick and write your applications on top of CloudStack using one of those tools. Based on these tools you will be able to deploy infrastructure easily, quickly and in a reproducible manner. Lately CloudStack has seen the number of tools grow, just today, I learned about a Fluentd plugin and last week a Cloudfoundry BOSH interface was released. I also committed a straightforward dynamic inventory script for Ansible and a tweet just flew by about a vagrant-cloudstack plugin. The list goes on, pick what suits you and answers your need, then have fun.
