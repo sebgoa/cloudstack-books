@@ -26,7 +26,7 @@ A special thanks to [Geoff Higginbottom](https://github.com/geoffhigginbottom) f
 
 Latest Version
 --------------
-The latest source of this books is available at:
+The latest source of this book is available at:
 https://github.com/runseb/cloudstack-books
 
 
