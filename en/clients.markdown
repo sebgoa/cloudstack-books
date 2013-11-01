@@ -3,7 +3,7 @@ About This Book
 
 License
 -------
-The Little CloudStack Book is licensed under the Attribution-NonCommercial 3.0 Unported license. **You should not have paid for this book.**
+The Little CloudStack Book is licensed under the Attribution-NonCommercial 3.0 Unported license. **You should not have paid for this book**
 
 You are basically free to copy, distribute, modify or display the book. However, I ask that you always attribute the book to me, Sebastien Goasguen and do not use it for commercial purposes.
 
@@ -11,7 +11,7 @@ You can see the full text of the license at:
 
 <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
-"Apache", "CloudStack", "Apache CloudStack", the Apache CloudStack logo, the Apache CloudStack Cloud Monkey logo and the Apache feather logos are registered trademarks or trademarks of The Apache Software Foundation.
+"Apache", "CloudStack", "Apache CloudStack", the Apache CloudStack logo, the Apache CloudStack CloudMonkey logo and the Apache feather logos are registered trademarks or trademarks of The Apache Software Foundation.
 
 
 About The Author
@@ -25,14 +25,14 @@ Introduction
 Clients and high level Wrappers are critical to the ease of use of any API, even more so Cloud APIs. In this book we present the basics of the CloudStack API and introduce some low level clients before diving into more advanced wrappers.
 The first chapter is dedicated to clients and the second chapter to wrappers or what I considered to be high level tools built on top of a CloudStack client.
 
-In the first chapter, we start by illustrating how to sign requests with the native API -in the sake of completeness- and
+In the first chapter, we start by illustrating how to sign requests with the native API -for the sake of completeness- and
 because it is a very nice exercise for beginners. We then introduce CloudMonkey the CloudStack CLI and shell which boasts a 100% coverage of
 the API. Then jclouds is discussed. While jclouds is a java library, it can also be used as a cli or interactive shell, we present jclouds-cli to contrast it to
 CloudMonkey and introduce jclouds. Apache libcloud is a Python module that provides a common API on top of many Cloud providers API, once installed, a developer can use libcloud to talk to multiple cloud providers and cloud APIs, it serves a similar role as jclouds but in Python. Finally, we present Boto, the well-known Python Amazon Web Service interface, and show how it can be used with a CloudStack cloud running the AWS interface.
 
 In the second chapter we introduce several high level wrappers for configuration management and automated provisioning.
-The presentation of these wrappers aim to answer the question "I have a cloud now what ?". Starting and stoping virtual machines is the core functionality of a cloud, 
-but it empowers users to do much more. Automation is the key of today's IT infrastructure. The wrappers presented here show you how you can automate configuration management and automate provisioning of infrastructures that lie within your cloud. We introduce Salt-cloud for Saltstack, a Python alternative to the well known Chef and Puppet systems. We then introduce the knife CloudStack plugin for Chef and show you how easy it is to deploy machines in a cloud and configure them, we finish with another Apache project based on jclouds: Whirr. Apache Whirr simplifies the on-demand provisioning of clusters of virtual machine instances, hence it allows you to easily provision big data infrastructure on-demand, whether you need a *HADOOP* cluster, an *Elasticsearch* cluster or even a *Cassandra* cluster.
+The presentation of these wrappers aim to answer the question "I have a cloud now what ?". Starting and stopping virtual machines is the core functionality of a cloud, 
+but it empowers users to do much more. Automation is the key of today's IT infrastructure. The wrappers presented here show you how you can automate configuration management and automate provisioning of infrastructures that lie within your cloud. We introduce Salt-cloud for Saltstack, a Python alternative to the well known Chef and Puppet systems. We then introduce the knife CloudStack plugin for Chef and show you how easy it is to deploy machines in a cloud and configure them. We finish with another Apache project based on jclouds: Whirr. Apache Whirr simplifies the on-demand provisioning of clusters of virtual machine instances, hence it allows you to easily provision big data infrastructure on-demand, whether you need a *HADOOP* cluster, an *Elasticsearch* cluster or even a *Cassandra* cluster.
 
 The CloudStack API
 ==================
@@ -45,9 +45,9 @@ highlighted for completeness.
 
 Basics of the API
 -----------------
-The CloudStack API is a query based API using http which returns results in XML or JSON. It is used to implement the default web UI. This API is not a standard like [OGF OCCI](http://www.ogf.org/gf/group_info/view.php?group=occi-wg) or [DMTF CIMI](http://dmtf.org/standards/cloud) but is easy to learn. A mapping exists between the AWS API and the CloudStack API as will be seen in the next section. Recently a Google Compute Engine interface was also developed that maps the GCE REST API to the CloudStack API described here. The API [docs](http://cloudstack.apache.org/docs/api/) are a good start to learn the extent of the API. Multiple clients exist on [github](https://github.com/search?q=cloudstack+client&ref=cmdform) to use this API, you should be able to find one in your favorite language. The reference documentation for the API and changes that might occur from version to version is availble [on-line](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.1.1/html/Developers_Guide/index.html). This short section is aimed at providing a quick summary to give you a base understanding of how to use this API. As a quick start, a good way to explore the API is to navigate the dashboard with a firebug console (or similar developer console) to study the queries.
+The CloudStack API is a query based API using http which returns results in XML or JSON. It is used to implement the default web UI. This API is not a standard like [OGF OCCI](http://www.ogf.org/gf/group_info/view.php?group=occi-wg) or [DMTF CIMI](http://dmtf.org/standards/cloud) but is easy to learn. A mapping exists between the AWS API and the CloudStack API as will be seen in the next section. Recently a Google Compute Engine interface was also developed that maps the GCE REST API to the CloudStack API described here. The API [docs](http://cloudstack.apache.org/docs/api/) are a good start to learn the extent of the API. Multiple clients exist on [github](https://github.com/search?q=cloudstack+client&ref=cmdform) to use this API, you should be able to find one in your favourite language. The reference documentation for the API and changes that might occur from version to version is available [on-line](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.1.1/html/Developers_Guide/index.html). This short section is aimed at providing a quick summary to give you a base understanding of how to use this API. As a quick start, a good way to explore the API is to navigate the dashboard with a firebug console (or similar developer console) to study the queries.
 
-In a succint statement, the CloudStack query API can be used via http GET requests made against your cloud endpoint (e.g http://localhost:8080/client/api). The API name is passed using the `command` key and the various parameters for this API call are passed as key value pairs. The request is signed using the secret key of the user making the call. Some calls are synchronous while some are asynchronous, this is documented in the API [docs](http://cloudstack.apache.org/docs/api/). Asynchronous calls return a `jobid`, the status and result of a job can be queried with the `queryAsyncJobResult` call. Let's get started and give an example of calling the `listUsers` API in Python.
+In a succinct statement, the CloudStack query API can be used via http GET requests made against your cloud endpoint (e.g http://localhost:8080/client/api). The API name is passed using the `command` key and the various parameters for this API call are passed as key value pairs. The request is signed using the secret key of the user making the call. Some calls are synchronous while some are asynchronous, this is documented in the API [docs](http://cloudstack.apache.org/docs/api/). Asynchronous calls return a `jobid`, the status and result of a job can be queried with the `queryAsyncJobResult` call. Let's get started and give an example of calling the `listUsers` API in Python.
 
 First you will need to generate keys to make requests. Going through the dashboard, go under `Accounts` select the appropriate account then click on `Show Users` select the intended user and generate keys using the `Generate Keys` icon. You will see an `API Key` and `Secret Key` field being generated. The keys will be of the form:
 
