@@ -3,7 +3,7 @@ About This Book
 
 License
 -------
-The Little CloudStack Book book is licensed under the Attribution-NonCommercial 3.0 Unported license. **You should not have paid for this book.**
+The Little CloudStack Book is licensed under the Attribution-NonCommercial 3.0 Unported license. **You should not have paid for this book.**
 
 You are basically free to copy, distribute, modify or display the book. However, I ask that you always attribute the book to me, Sebastien Goasguen and do not use it for commercial purposes.
 
@@ -22,8 +22,7 @@ His blog can be found at http://sebgoa.blogspot.com and he tweets via @sebgoa. Y
 
 Introduction
 ------------
-Clients and high level Wrappers are critical to the ease of use of any API, even more
-so Cloud APIs. In this book we present the basics of the CloudStack API and introduce some low level clients before diving into more advanced wrappers.
+Clients and high level Wrappers are critical to the ease of use of any API, even more so Cloud APIs. In this book we present the basics of the CloudStack API and introduce some low level clients before diving into more advanced wrappers.
 The first chapter is dedicated to clients and the second chapter to wrappers or what I considered to be high level tools built on top of a CloudStack client.
 
 In the first chapter, we start by illustrating how to sign requests with the native API -in the sake of completeness- and
