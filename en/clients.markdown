@@ -111,14 +111,14 @@ Finally, build the entire string by joining the baseurl, the request str and the
 	   "secretkey":"VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZshwJaw7FF3akA3KBQ",
 	   "accountid":"7548ac03-af1d-4c1c-9064-2f3e2c0eda0d"}]}}
 													   
-All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favorite client or use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods. It has nice auto-completion, history and help features as well as an API discovery mechanism since 4.2.
+All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favourite client or use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods. It has nice auto-completion, history and help features as well as an API discovery mechanism since 4.2.
 
 CloudMonkey
 ===========
 CloudMonkey is the CloudStack Command Line Interface (CLI). It is written
 in Python. CloudMonkey can be used both as an interactive shell and as a
 command line tool which simplifies CloudStack configuration and management.
-It can be used with CloudStack 4.0-incubating and above
+It can be used with CloudStack 4.0-incubating and above.
 
 
 Installing CloudMonkey
@@ -132,8 +132,7 @@ releases or via a community maintained distribution at [the cheese
 shop](http://pypi.python.org/pypi/cloudmonkey/). CloudMonkey now lives within its own repository but it used to be part of the CloudStack release. Developers could get
 it directly from the CloudStack git repository in *tools/cli/*. Now, it is better to use the CloudMonkey specific repository.
 
--   Via the official Apache CloudStack-CloudMonkey git
-    repository.
+-   Via the official Apache CloudStack-CloudMonkey git repository.
 
             
         $ git clone https://git-wip-us.apache.org/repos/asf/cloudstack-cloudmonkey.git
@@ -202,8 +201,8 @@ API Discovery
 > discovery service is enabled. CloudMonkey will discover automatically
 > the api calls available on the management server. The sync command in
 > CloudMonkey pulls a list of apis which are accessible to your user
-> role. This allows cloudmonkey to be adaptable to
-> changes in mgmt server, so in case the sysadmin enables a plugin such
+> role. This allows CloudMonkey to be adaptable to
+> changes in management server, so in case the sysadmin enables a plugin such
 > as Nicira NVP for that user role, the users can get those changes.
 
 To discover the APIs available do:
@@ -388,7 +387,7 @@ configuration management via chef are the main features.
 > **Warning**
 >
 > jclouds is under going incubation at the Apache Software Foundation,
-> jclouds-cli is available on github. Changes may occur in the sofware
+> jclouds-cli is available on github. Changes may occur in the software
 > from the time of this writing to the time of you reading it.
 
 Installation and Configuration
@@ -786,7 +785,7 @@ github:
 
     gem install knife-cloudstack
 
-If successfull the *knife* command should now be in your path. Issue
+If successful the *knife* command should now be in your path. Issue
 *knife* at the prompt and see the various options and sub-commands
 available.
 
@@ -852,9 +851,9 @@ cs* at the prompt. You will see:
 > **Note**
 >
 > If you only have user privileges on the Cloud you are using, as
-> opposed to Admin privileges, do note that some commands won't be
+> opposed to admin privileges, do note that some commands won't be
 > available to you. For instance on the Cloud I am using where I am a
-> standard user I cannot access any of the infrastructure type command
+> standard user I cannot access any of the infrastructure type commands
 > like:
 >
 >     $ knife cs pod list
@@ -1006,7 +1005,7 @@ and security groups for access.
                 
 
 Chef will then configure the machine based on the cookbook passed in the
---run-list option, here I setup a simple webserver. Note the keypair
+--run-list option, here I setup a simple web server. Note the keypair
 that I used and the security group. I also specify *--no-public-ip*
 which disables the IP address allocation and association. This is
 specific to the setup of *exoscale* which automatically uses a public IP
@@ -1063,7 +1062,7 @@ specify an identity file as I will retrieve the ssh password with the
 > **Warning**
 >
 > You will want to review the security implications of doing the
-> boostrap as root and using the default password to do so.
+> bootstrap as root and using the default password to do so.
 >
 > In Advanced Zone, your cloud provider may also have decided to block
 > all egress traffic to the public internet, which means that contacting
