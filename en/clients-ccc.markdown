@@ -3,7 +3,7 @@ About This Book
 
 License
 -------
-The Little CloudStack Book is licensed under the Attribution-NonCommercial 3.0 Unported license. **You should not have paid for this book**
+The Little CloudStack Book is licensed under the Attribution NonCommercial 3.0 Unported license. **You should not have paid for this book**
 
 You are basically free to copy, distribute, modify or display the book. However, I ask that you always attribute the book to me, Sebastien Goasguen and do not use it for commercial purposes.
 
@@ -12,7 +12,6 @@ You can see the full text of the license at:
 <http://creativecommons.org/licenses/by-nc/3.0/legalcode>
 
 "Apache", "CloudStack", "Apache CloudStack", the Apache CloudStack logo, the Apache CloudStack CloudMonkey logo and the Apache feather logos are registered trademarks or trademarks of The Apache Software Foundation.
-
 
 About The Author
 ----------------
@@ -27,8 +26,8 @@ A special thanks to [Geoff Higginbottom](https://github.com/geoffhigginbottom) f
 Latest Version
 --------------
 The latest source of this book is available at:
-https://github.com/runseb/cloudstack-books
 
+    https://github.com/runseb/cloudstack-books
 
 Introduction
 ------------
@@ -41,10 +40,10 @@ CloudMonkey and introduce jclouds. Apache libcloud is a Python module that provi
 
 In the second chapter we introduce several high level wrappers for configuration management and automated provisioning.
 The presentation of these wrappers aim to answer the question "I have a cloud now what ?". Starting and stopping virtual machines is the core functionality of a cloud, 
-but it empowers users to do much more. Automation is the key of today's IT infrastructure. The wrappers presented here show you how you can automate configuration management and automate provisioning of infrastructures that lie within your cloud. We introduce Salt-cloud for Saltstack, a Python alternative to the well known Chef and Puppet systems. We then introduce the knife CloudStack plugin for Chef and show you how easy it is to deploy machines in a cloud and configure them. We finish with another Apache project based on jclouds: Whirr. Apache Whirr simplifies the on-demand provisioning of clusters of virtual machine instances, hence it allows you to easily provision big data infrastructure on-demand, whether you need a *HADOOP* cluster, an *Elasticsearch* cluster or even a *Cassandra* cluster.
+but it empowers users to do much more. Automation is the key of today's IT infrastructure. The wrappers presented here show you how you can automate configuration management and automate provisioning of infrastructures that lie within your cloud. We introduce Salt-cloud for Saltstack, a Python alternative to the well known Chef and Puppet systems. We then introduce the knife CloudStack plugin for Chef and show you how easy it is to deploy machines in a cloud and configure them. We finish with another Apache project based on jclouds: Whirr. Apache Whirr simplifies the on-demand provisioning of clusters of virtual machine instances, hence it allows you to easily provision big data infrastructure on-demand, whether you need a *HADOOP*, *Elasticsearch* or even a *Cassandra* cluster.
 
-The CloudStack API
-==================
+Getting Started - The CloudStack API
+====================================
 All functionalities of the CloudStack data center orchestrator are exposed
 via an API server. Github currently has over twenty clients for this
 API, in various languages. In this section we introduce this API and the
@@ -56,12 +55,16 @@ Basics of the API
 -----------------
 The CloudStack API is a query based API using http which returns results in XML or JSON. It is used to implement the default web UI. This API is not a standard like [OGF OCCI](http://www.ogf.org/gf/group_info/view.php?group=occi-wg) or [DMTF CIMI](http://dmtf.org/standards/cloud) but is easy to learn. A mapping exists between the AWS API and the CloudStack API as will be seen in the next section. Recently a Google Compute Engine interface was also developed that maps the GCE REST API to the CloudStack API described here. The API [docs](http://cloudstack.apache.org/docs/api/) are a good start to learn the extent of the API. Multiple clients exist on [github](https://github.com/search?q=cloudstack+client&ref=cmdform) to use this API, you should be able to find one in your favourite language. The reference documentation for the API and changes that might occur from version to version is available [on-line](http://cloudstack.apache.org/docs/en-US/Apache_CloudStack/4.1.1/html/Developers_Guide/index.html). This short section is aimed at providing a quick summary to give you a base understanding of how to use this API. As a quick start, a good way to explore the API is to navigate the dashboard with a firebug console (or similar developer console) to study the queries.
 
-In a succinct statement, the CloudStack query API can be used via http GET requests made against your cloud endpoint (e.g http://localhost:8080/client/api). The API name is passed using the `command` key and the various parameters for this API call are passed as key value pairs. The request is signed using the secret key of the user making the call. Some calls are synchronous while some are asynchronous, this is documented in the API [docs](http://cloudstack.apache.org/docs/api/). Asynchronous calls return a `jobid`, the status and result of a job can be queried with the `queryAsyncJobResult` call. Let's get started and give an example of calling the `listUsers` API in Python.
+In a succinct statement, the CloudStack query API can be used via http GET requests made against your cloud endpoint like:
+    
+	http://localhost:8080/client/api.
+	
+The API name is passed using the `command` key and the various parameters for this API call are passed as key value pairs. The request is signed using the secret key of the user making the call. Some calls are synchronous while some are asynchronous, this is documented in the API [docs](http://cloudstack.apache.org/docs/api/). Asynchronous calls return a `jobid`, the status and result of a job can be queried with the `queryAsyncJobResult` call. Let's get started and give an example of calling the `listUsers` API in Python.
 
 First you will need to generate keys to make requests. Going through the dashboard, go under `Accounts` select the appropriate account then click on `Show Users` select the intended user and generate keys using the `Generate Keys` icon. You will see an `API Key` and `Secret Key` field being generated. The keys will be of the form:
 
-    API Key : XzAz0uC0t888gOzPs3HchY72qwDc7pUPIO8LxC-VkIHo4C3fvbEBY_Ccj8fo3mBapN5qRDg_0_EbGdbxi8oy1A
-	Secret Key: zmBOXAXPlfb-LIygOxUVblAbz7E47eukDS_0JYUxP3JAmknOYo56T0R-AcM7rK7SMyo11Y6XW22gyuXzOdiybQ
+    API Key : XzAz0uC0t888gOzPs3HchY72qwDc7pUPIO8LxC-VkIHo4C3fvbEBY__EbGdbxi8oy1A
+	Secret Key: zmBOXAXPlfb-LIygOxUVblAbz7E47eukDS_-AcM7rK7SMyo11Y6XW22gyuXzOdiybQ
 
 Open a Python shell and import the basic modules necessary to make the request. Do note that this request could be made many different ways, this is just a low level example. The `urllib*` modules are used to make the http request and do url encoding. The `hashlib` module gives us the sha1 hash function. It is used to generate the `hmac` (Keyed Hashing for Message Authentication) using the secretkey. The result is encoded using the `base64` module.
 
@@ -81,20 +84,20 @@ Define the endpoint of the Cloud, the command that you want to execute, the type
     >>> request={}
     >>> request['command']='listUsers'
     >>> request['response']='json'
-    >>> request['apikey']='plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg'
-    >>> secretkey='VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZsYBkoXkY9b7EhwJaw7FF3akA3KBQ'
+    >>> request['apikey']='plgWJfZK4gyS3mOMTVmjUVgu38zCm0bewzGUdP66mg'
+    >>> secretkey='VDaACYb0LV9eNjTe7EhwJaw7FF3akA3KBQ'
 
 Build the base request string, the combination of all the key/pairs of the request, url encoded and joined with ampersand.
 
     >>> request_str='&'.join(['='.join([k,urllib.quote_plus(request[k])]) for k in request.keys()])
     >>> request_str
-    'apikey=plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg&command=listUsers&response=json'
+    'apikey=plgWJfZK4gyS3mOMTVmjUVg38zCm0bewzGUdP66mg&command=listUsers&response=json'
 
 Compute the signature with hmac, do a 64 bit encoding and a url encoding, the string used for the signature is similar to the base request string shown above but the keys/values are lower cased and joined in a sorted order
 
     >>> sig_str='&'.join(['='.join([k.lower(),urllib.quote_plus(request[k].lower().replace('+','%20'))])for k in sorted(request.iterkeys())]) 
     >>> sig_str
-    'apikey=plgwjfzk4gys3momtvmjuvg-x-jlwlnfauj9gabbbf9edm-kaymmailqzzq1elzlyq_u38zcm0bewzgudp66mg&command=listusers&response=json'
+    'apikey=plgwjfzk4gys3momtvmjuvg38zcm0bewzgudp66mg&command=listusers&response=json'
     >>> sig=hmac.new(secretkey,sig_str,hashlib.sha1).digest()
     >>> sig
     'M:]\x0e\xaf\xfb\x8f\xf2y\xf1p\x91\x1e\x89\x8a\xa1\x05\xc4A\xdb'
@@ -110,20 +113,23 @@ Finally, build the entire string by joining the baseurl, the request str and the
 
     >>> req=baseurl+request_str+'&signature='+sig
     >>> req
-    'http://localhost:8080/client/api?apikey=plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg&command=listUsers&response=json&signature=TTpdDq%2F7j%2FJ58XCRHomKoQXEQds%3D'
+    'http://localhost:8080/client/api?apikey=plgWJfZK4g38zCm0bewzGUdP66mg&command=listUsers&response=json&signature=TTpdDq%2F7j%2FJ58XCRHomKoQXEQds%3D'
     >>> res=urllib2.urlopen(req)
     >>> res.read()
     '{ "listusersresponse" : { "count":1 ,"user" : [  {"id":"7ed6d5da-93b2-4545-a502-23d20b48ef2a","username":"admin","firstname":"admin",
 	   "lastname":"cloud","created":"2012-07-05T12:18:27-0700","state":"enabled","account":"admin",
        "accounttype":1,"domainid":"8a111e58-e155-4482-93ce-84efff3c7c77","domain":"ROOT",
-	   "apikey":"plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdM-kAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg",
-	   "secretkey":"VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZshwJaw7FF3akA3KBQ",
+	   "apikey":"plgWJfZK4gyS3mOMTVmjUVg38zCm0bewzGUdP66mg",
+	   "secretkey":"VDaACYb0LV9ehwJaw7FF3akA3KBQ",
 	   "accountid":"7548ac03-af1d-4c1c-9064-2f3e2c0eda0d"}]}}
 													   
-All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favourite client or use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods. It has nice auto-completion, history and help features as well as an API discovery mechanism since 4.2.
+All the clients that you will find on github will implement this signature technique, you should not have to do it by hand. Now that you have explored the API through the UI and that you understand how to make low level calls, pick your favourite client or use [CloudMonkey](https://pypi.python.org/pypi/cloudmonkey/). CloudMonkey is a sub-project of Apache CloudStack and gives operators/developers the ability to use any of the API methods.
+
+Chapter 1 - Clients
+===================
 
 CloudMonkey
-===========
+-----------
 CloudMonkey is the CloudStack Command Line Interface (CLI). It is written
 in Python. CloudMonkey can be used both as an interactive shell and as a
 command line tool which simplifies CloudStack configuration and management.
@@ -174,8 +180,8 @@ appropriate file paths in `~/.cloudmonkey/config`
     display = table
 
     [user]
-    secretkey =VDaACYb0LV9eNjTetIOElcVQkvJck_J_QljX_FcHRj87ZKiy0z0ty0ZsYBkoXkY9b7eq1EhwJaw7FF3akA3KBQ 
-    apikey = plgWJfZK4gyS3mOMTVmjUVg-X-jlWlnfaUJ9GAbBbf9EdMkAYMmAiLqzzq1ElZLYq_u38zCm0bewzGUdP66mg
+    secretkey =VDaACYb0LV9EhwJaw7FF3akA3KBQ 
+    apikey = plgWJfZK438zCm0bewzGUdP66mg
 
     [server]
     path = /client/api
@@ -224,19 +230,17 @@ a tabular formatting can be setup. You may enable tabular listing and
 even choose set of column fields, this allows you to create your own
 field using the filter param which takes in comma separated argument. If
 argument has a space, put them under double quotes. The create table
-will have the same sequence of field filters provided
-
-To enable it, use the *set* function and create filters like so:
+will have the same sequence of field filters provided. To enable it, use the *set* function and create filters like so:
 
     > set display table
     > list users filter=id,domain,account
     count = 1
     user:
-    +--------------------------------------+--------+---------+
-    |                  id                  | domain | account |
-    +--------------------------------------+--------+---------+
-    | 7ed6d5da-93b2-4545-a502-23d20b48ef2a |  ROOT  |  admin  |
-    +--------------------------------------+--------+---------+
+    +---------+--------+---------+
+    |  id     | domain | account |
+    +---------+--------+---------+
+    | 7ed6d5  |  ROOT  |  admin  |
+    +---------+--------+---------+
         
 
 Interactive Shell Usage
@@ -423,13 +427,9 @@ and runs, you should see the following output:
     [installed  ] [1.7.0-SNAPSHOT] jclouds                                 jclouds-1.7.0-SNAPSHOT JClouds
     [installed  ] [1.7.0-SNAPSHOT] jclouds-blobstore                       jclouds-1.7.0-SNAPSHOT JClouds Blobstore
     [installed  ] [1.7.0-SNAPSHOT] jclouds-compute                         jclouds-1.7.0-SNAPSHOT JClouds Compute
-    [installed  ] [1.7.0-SNAPSHOT] jclouds-management                      jclouds-1.7.0-SNAPSHOT JClouds Management
-    [uninstalled] [1.7.0-SNAPSHOT] jclouds-api-filesystem                  jclouds-1.7.0-SNAPSHOT JClouds - API - FileSystem
     [installed  ] [1.7.0-SNAPSHOT] jclouds-aws-ec2                         jclouds-1.7.0-SNAPSHOT Amazon Web Service - EC2
     [uninstalled] [1.7.0-SNAPSHOT] jclouds-aws-route53                     jclouds-1.7.0-SNAPSHOT Amazon Web Service - Route 53
     [installed  ] [1.7.0-SNAPSHOT] jclouds-aws-s3                          jclouds-1.7.0-SNAPSHOT Amazon Web Service - S3
-    [uninstalled] [1.7.0-SNAPSHOT] jclouds-aws-sqs                         jclouds-1.7.0-SNAPSHOT Amazon Web Service - SQS
-    [uninstalled] [1.7.0-SNAPSHOT] jclouds-aws-sts                         jclouds-1.7.0-SNAPSHOT Amazon Web Service - STS
     ...<snip>        
 
 Using jclouds CLI
@@ -498,6 +498,7 @@ We need to define the name of a group and give the number of instance
 that we want to start. Plus the hardware and image id. In terms of
 hardware, we are going to use the smallest possible hardware and for image we give a uuid from the previous list.
 
+    $jclouds node create --smallest --ImageId d16c78d-268f-47d0-be0c-b80d31e765d2 foobar 1
     $ jclouds node list
     [id]                                 [location]                           [hardware]                           [group] [status]
     4e733609-4c4a-4de1-9063-6fe5800ccb10 1128bd56-b4d9-4ac6-a7b9-c715b187ce11 71004023-bb72-4a97-b1e9-bc66dfce9470 foobar  RUNNING 
@@ -626,8 +627,8 @@ access to a CloudStack Basic zone like [Exoscale](http://www.exoscale.ch).
 
     conn.ex_list_security_groups()
     conn.ex_create_security_group(name='libcloud')
-    conn.ex_authorize_security_group_ingress(securitygroupname='llibcloud',protocol='TCP',startport=22,cidrlist='0.0.0.0/0')
-    conn.ex_delete_security_group('llibcloud')
+    conn.ex_authorize_security_group_ingress(securitygroupname='libcloud',protocol='TCP',startport=22,cidrlist='0.0.0.0/0')
+    conn.ex_delete_security_group('libcloud')
 
 Development of the CloudStack driver in Libcloud is very active, there is also support for advanced zone via calls to do SourceNAT and StaticNAT.
 
@@ -669,8 +670,8 @@ instantiate to libcloud CloudStack driver, one on
 
     drivers = [exoconn, ikoulaconn]
 
-            for driver in drivers:
-                print driver.list_locations()
+    for driver in drivers:
+        print driver.list_locations()
 
 > **Note**
 >
@@ -690,26 +691,27 @@ Pyton Boto
 There are many tools available to interface with a AWS compatible API.
 In this section we provide a short example that users of CloudStack can
 build upon using the AWS interface to CloudStack.
+
 Boto Examples
 -------------
-Boto is one of them. It is a Python package available at
-https://github.com/boto/boto. In this section we provide two examples of
-Python scripts that use Boto and have been tested with the CloudStack AWS
-API Interface.
+Boto is one of them. It is a Python package available at:
 
-First is an EC2 example. Replace the Access and Secret Keys with your
+    https://github.com/boto/boto
+
+In this section we provide one example of a
+Python script that uses Boto and has been tested with the CloudStack AWS
+API Interface. The AWS interface can be started with *`service cloudstack-awsapi start`* and at least one service offering needs to match the EC2 instance types (e.g m1.small). Here is the EC2 example. Replace the Access and Secret Keys with your
 own and update the endpoint.
 
     #!/usr/bin/env python
-
     import sys
     import os
     import boto
     import boto.ec2
 
     region = boto.ec2.regioninfo.RegionInfo(name="ROOT",endpoint="localhost")
-    apikey='GwNnpUPrO6KgIdZu01z_ZhhZnKjtSdRwuYd4DvpzvFpyxGMvrzno2q05MB0ViBoFYtdqKd'
-    secretkey='t4eXLEYWw7chBhDlaKf38adCMSHx_wlds6JfSx3z9fSpSOm0AbP9Moj0oGIzy2LSC8iw'
+    apikey='GwNnpUPrO6KgIq05MB0ViBoFYtdqKd'
+    secretkey='t4eXLEYWwzy2LSC8iw'
 
     def main():
         '''Establish connection to EC2 cloud'''
@@ -737,8 +739,8 @@ is backed by a standard NFS server and therefore is not a true scalable distribu
 service in your Cloud I recommend to use other software like RiakCS, Ceph radosgw or Glusterfs S3 interface. These
 systems handle large scale, chunking and replication.
 
-Wrappers
-========
+Chapter 2 - Wrappers
+====================
 In this paragraph we introduce several CloudStack *wrappers*. These tools
 are using client libraries presented in the previous chapter (or their own built-in request mechanisms) and add
 additional functionality that involve some high-level orchestration. For
@@ -982,7 +984,7 @@ and security groups for access.
     185.19.XX.XX Installing Chef 11.4.4
                 
 Chef will then configure the machine based on the cookbook passed in the
---run-list option, here I setup a simple web server. Note the keypair
+*--run-list* option, here I setup a simple web server. Note the keypair
 that I used and the security group. I also specify *--no-public-ip*
 which disables the IP address allocation and association. This is
 specific to the setup of *exoscale* which automatically uses a public IP
@@ -1084,7 +1086,7 @@ use. Note that the optional parameter are specific to the Cloud that
 this was tested on. Cloud in advanced zones especially will need a
 different setup.
 
-> Warning
+> **Warning**
 >
 > Saltcloud uses libcloud. Support for advanced zones in libcloud is
 > still experimental, therefore using SaltCloud in advanced zone will
@@ -1176,17 +1178,14 @@ The W.X.Y.Z IP address above should be the IP address of the master that was dep
 Once the keys of your minions have been accepted by the master, you can start sending commands to them and use SLS formulaes to configure the minions
 	
     root@mymaster11:~# salt '*' test.ping
-    minion002:
-       True
-    minion001:
-       True
-    root@mymaster11:~# salt '*' test.ping
     minion003:
         True
     minion002:
         True
     minion001:
         True
+
+Have fun with SaltStack in the Cloud. You could also use Salt to install CloudStack itself and some SLS formulaes are in the works to do it.
 
 Apache Whirr
 ============
@@ -1261,8 +1260,8 @@ is your API key, the CREDENTIAL is your secret key and the ENDPPOINT is
 the endpoint url. For instance:
 
     PROVIDER=cloudstack
-    IDENTITY=mnH5EbKc4534592347523486724389673248AZW4kYV5gdsfgdfsgdsfg87sdfohrjktn5Q
-    CREDENTIAL=Hv97W58iby5PWL1ylC4oJls46456435634564537sdfgdfhrteydfg87sdf89gysdfjhlicg
+    IDENTITY=mnHrjktn5Q
+    CREDENTIAL=Hv97W5fjhlicg
     ENDPOINT=https://api.exoscale.ch/compute
 
 With the credentials and endpoint defined you can create a *properties*
@@ -1382,7 +1381,7 @@ that was created:
     drwxrwxrwx   - hdfs supergroup          0 2013-06-21 20:11 /tmp
     drwxrwxrwx   - hdfs supergroup          0 2013-06-21 20:11 /user            
 
-Create a directory to put your input data
+Create a directory to put your input data:
 
     $ hadoop fs -mkdir input
     $ hadoop fs -ls /user/sebastiengoasguen
@@ -1406,20 +1405,20 @@ the hadoop.properties file.
 
 Start the map-reduce job:
 
-                $ hadoop jar $HADOOP_MAPRED_HOME/hadoop-examples.jar wordcount input output
-                13/06/21 20:19:59 WARN mapred.JobClient: Use GenericOptionsParser for parsing the arguments. Applications should implement Tool for the same.
-                13/06/21 20:20:00 INFO input.FileInputFormat: Total input paths to process : 1
-                13/06/21 20:20:00 INFO mapred.JobClient: Running job: job_201306212011_0001
-                13/06/21 20:20:01 INFO mapred.JobClient:  map 0% reduce 0%
-                13/06/21 20:20:11 INFO mapred.JobClient:  map 100% reduce 0%
-                13/06/21 20:20:17 INFO mapred.JobClient:  map 100% reduce 33%
-                13/06/21 20:20:18 INFO mapred.JobClient:  map 100% reduce 100%
-                13/06/21 20:20:21 INFO mapred.JobClient: Job complete: job_201306212011_0001
-                13/06/21 20:20:22 INFO mapred.JobClient: Counters: 32
-                13/06/21 20:20:22 INFO mapred.JobClient:   File System Counters
-                13/06/21 20:20:22 INFO mapred.JobClient:     FILE: Number of bytes read=133
-                13/06/21 20:20:22 INFO mapred.JobClient:     FILE: Number of bytes written=766347
-                ...           
+    $ hadoop jar $HADOOP_MAPRED_HOME/hadoop-examples.jar wordcount input output
+    13/06/21 20:19:59 WARN mapred.JobClient: Use GenericOptionsParser for parsing the arguments. Applications should implement Tool for the same.
+    13/06/21 20:20:00 INFO input.FileInputFormat: Total input paths to process : 1
+    13/06/21 20:20:00 INFO mapred.JobClient: Running job: job_201306212011_0001
+    13/06/21 20:20:01 INFO mapred.JobClient:  map 0% reduce 0%
+    13/06/21 20:20:11 INFO mapred.JobClient:  map 100% reduce 0%
+    13/06/21 20:20:17 INFO mapred.JobClient:  map 100% reduce 33%
+    13/06/21 20:20:18 INFO mapred.JobClient:  map 100% reduce 100%
+    13/06/21 20:20:21 INFO mapred.JobClient: Job complete: job_201306212011_0001
+    13/06/21 20:20:22 INFO mapred.JobClient: Counters: 32
+    13/06/21 20:20:22 INFO mapred.JobClient:   File System Counters
+    13/06/21 20:20:22 INFO mapred.JobClient:     FILE: Number of bytes read=133
+    13/06/21 20:20:22 INFO mapred.JobClient:     FILE: Number of bytes written=766347
+    ...           
 
 And you can finally check the output:
 
