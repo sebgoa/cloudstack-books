@@ -707,7 +707,7 @@ From this basic setup you can imagine how you would write an application
 that would manage instances in different Cloud Providers. Providing more
 resiliency to your overall infrastructure.
 
-Pyton Boto
+Python Boto
 ==========
 There are many tools available to interface with a AWS compatible API.
 In this section we provide a short example that users of CloudStack can
