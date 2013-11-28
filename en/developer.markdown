@@ -109,12 +109,12 @@ Install `Maven` to later build CloudStack. Grab the 3.0.5 release from the Maven
 
 Setup Maven system wide by creating a `/etc/profile.d/maven.sh` file with the following content:
 	
-	export M2_HOME=/usr/local/maven
-	export PATH=${M2_HOME}/bin:${PATH}
+    export M2_HOME=/usr/local/maven
+    export PATH=${M2_HOME}/bin:${PATH}
 
 Log out and log in again and you will have maven in your PATH:
 	
-	mvn --version
+    mvn --version
 
 This should have installed Maven 3.0, check the version number with `mvn --version`
 
@@ -199,7 +199,7 @@ Start jetty
 
     mvn -pl client jetty:run
    
-Setup a basic zone with Marvin. In a separate shell://
+Setup a basic zone with Marvin. In a separate shell:
 
     mvn -Pdeveloper,marvin.setup -Dmarvin.config=setup/dev/basic.cfg -pl :cloud-marvin integration-test
 
