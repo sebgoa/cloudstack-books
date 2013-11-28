@@ -75,7 +75,7 @@ If not already installed, install NTP for clock synchornization
 
 Install `openjdk`. As we're using Linux, OpenJDK is our first choice. 
 
-    yum -y install java-1.6.0-openjdk
+    yum -y install java-1.6.0-openjdk java-1.6.0-openjdk-devel
 
 Install `tomcat6`, note that the version of tomcat6 in the default CentOS 6.4 repo is 6.0.24, so we will grab the 6.0.35 version.
 The 6.0.24 version will be installed anyway as a dependency to cloudstack.
