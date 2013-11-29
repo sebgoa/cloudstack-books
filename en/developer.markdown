@@ -28,7 +28,7 @@ NTP might already be installed, check it with `service ntp status`. If it's not 
 
 Install `openjdk`. As we're using Linux, OpenJDK is our first choice. 
 
-	apt-get install openjdk-6-jdk
+    apt-get install openjdk-6-jdk
 
 Install `tomcat6`, note that the new version of tomcat on [Ubuntu](http://packages.ubuntu.com/precise/all/tomcat6) is the 6.0.35 version.
 
@@ -50,7 +50,7 @@ Install `git` to later clone the CloudStack source code:
 
 Install `Maven` to later build CloudStack
 	
-	apt-get install maven
+    apt-get install maven
 
 This should have installed Maven 3.0, check the version number with `mvn --version`
 
@@ -129,6 +129,7 @@ To install python-pip you might want to setup the Extra Packages for Enterprise 
     rpm -ivh epel-release-6-8.noarch.rpm
 	
 Then update you repository cache `yum update` and install pip `yum -y install python-pip`
+To install Marvin you will also need the Python development package `yum -y install python-devel`
 
 Finally install `mkisofs` with:
 	
