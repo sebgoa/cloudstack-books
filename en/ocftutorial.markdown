@@ -13,6 +13,9 @@ What we will do in this tutorial is:
  
 Getting your feet wet with [exoscale.ch](http://exoscale.ch)
 ============================================================
+
+Start an instance via the UI
+----------------------------
  
 1. Go to [exoscale.ch](http://exoscale.ch) and click on `free sign-up` in the Open Cloud section
 2. Ask me for the voucher code, you will get an additional 15CHF
@@ -21,8 +24,40 @@ Getting your feet wet with [exoscale.ch](http://exoscale.ch)
 4. Create a keypair and store the private key on your machine
 5. Start an instance
 6. ssh to the instance
+
+Find your API Keys and inspect the API calls
+--------------------------------------------
+
 7. Inspect the API requests with firebug or dev console of your choice
 8. Find your API keys (account section)
+
+Get wordpress installed on an instance
+---------------------------------------
+
+Open port 80 on the default security group.
+Start an Ubuntu 12.04 instance and in the User-Data tab input:
+
+    #!/bin/sh
+    set -e -x
+
+    apt-get --yes --quiet update
+    apt-get --yes --quiet install git puppet-common
+
+    #
+    # Fetch puppet configuration from public git repository. 
+    #
+
+    mv /etc/puppet /etc/puppet.orig
+    git clone https://github.com/retrack/exoscale-wordpress.git /etc/puppet
+ 
+    #
+    # Run puppet.
+    #
+
+    puppet apply /etc/puppet/manifests/init.pp
+
+Now open your browser on port 80 of the IP of your instance and Voila !
+
 
 CloudMonkey, an interactive shell to your cloud
 ===============================================
@@ -251,6 +286,9 @@ Set your API keys properly and execute the script. You can now explore the libcl
 Vagrant boxes
 =============
 
+Install Vagrant and create the exo boxes
+----------------------------------------
+
 [Vagrant](http://vagrantup.com) is a tool to create *lightweight, portable and reproducible development environments*. Specifically it allows you to use configuration management tools to configure a virtual machine locally (via virtualbox) and then deploy it *in the cloud* via Vagrant providers. 
 In this next exercise we are going to install vagrant on our local machine and use Exoscale vagrant boxes to provision VM in the Cloud using configuration setup in Vagrant. For future reading check this [post](http://sebgoa.blogspot.co.uk/2013/12/veewee-vagrant-and-cloudstack.html)
 
@@ -270,6 +308,9 @@ Edit the `config.py` script to specify your API keys, then run:
 If you are familiar with Vagrant this will be straightforward, if not, you need to add a box to your local installation for instance:
 
     vagrant box add Linux-Ubuntu-13.10-64-bit-50-GB-Disk /path/or/url/to/boxes/Linux-Ubuntu-13.10-64-bit-50-GB-Disk.box
+
+Initialize a `Vagrantfile` and start an instance
+----------------------------------------------
 
 Now you need to create a *Vagrantfile*. In the directory of you choice do:
 
@@ -307,6 +348,9 @@ You are now ready to bring the box up:
 
 Don't forget to use the `--provider=cloudstack` or the box won't come up. Check the exoscale dashboard to see the machine boot, try to ssh into the box.
 
+Add provisioning steps
+----------------------
+
 Once you have successfully started a machine with vagrant, you are ready to specify a provisioning script. Create a `boostrap.sh` bash script in your working directory and make it to whatever your want.
 
 Add this provisioning step in the `Vagrantfile` like so:
@@ -321,6 +365,32 @@ You are now ready to dig deeper into Vagrant provisioning. See the provisioner [
     config.vm.provision "chef_solo" do |chef|
         chef.add_recipe "mycookbook"
     end
+
+Puppet example
+---------------
+
+For [Puppet](http://docs.vagrantup.com/v2/provisioning/puppet_apply.html) remember the script that put in the Userdata of the very first example. We are going to use the same Puppet configuration but via Vagrant.
+
+Edit the `Vagrantfile` to have:
+
+    config.vm.provision "puppet" do |puppet|
+        puppet.module_path = "modules"
+    end
+
+Vagrant will look for the manifest in the `manifests` directory and for the modules in the `modules` directory.
+Now simply clone the repository that we used earlier:
+
+    git clone https://github.com/retrack/exoscale-wordpress
+
+You should now see the `modules` and `manifests` directory in the root of your working directory that contains the `Vagrantfile`.
+Remove the shell provisioning step and start the instance like before:
+
+    vagrant up --provider=cloudstack
+
+Open your browser and get back to Wordpress !
+
+Playing with multi-machines configuration
+-----------------------------------------
 
 Vagrant is also very interesting because you can start multiple machines at [once](http://docs.vagrantup.com/v2/multi-machine/index.html). Edit the `Vagrantfile` to add a `web` and a `db` machine. Add the cloudstack specific information and specify different bootstrap scripts.
 
