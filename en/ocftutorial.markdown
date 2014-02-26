@@ -312,9 +312,9 @@ If you are familiar with Vagrant this will be straightforward, if not, you need 
 Initialize a `Vagrantfile` and start an instance
 ----------------------------------------------
 
-Now you need to create a *Vagrantfile*. In the directory of you choice do:
+Now you need to create a *Vagrantfile*. In the directory of you choice  for example `/tutorial` do:
 
-   vagrant init
+    vagrant init
 
 Then edit the `Vagrantfile` created to contain this:
 
@@ -351,7 +351,7 @@ Don't forget to use the `--provider=cloudstack` or the box won't come up. Check 
 Add provisioning steps
 ----------------------
 
-Once you have successfully started a machine with vagrant, you are ready to specify a provisioning script. Create a `boostrap.sh` bash script in your working directory and make it to whatever your want.
+Once you have successfully started a machine with vagrant, you are ready to specify a provisioning script. Create a `boostrap.sh` bash script in your working directory and make it do whatever your want.
 
 Add this provisioning step in the `Vagrantfile` like so:
 
@@ -369,7 +369,7 @@ You are now ready to dig deeper into Vagrant provisioning. See the provisioner [
 Puppet example
 ---------------
 
-For [Puppet](http://docs.vagrantup.com/v2/provisioning/puppet_apply.html) remember the script that put in the Userdata of the very first example. We are going to use the same Puppet configuration but via Vagrant.
+For [Puppet](http://docs.vagrantup.com/v2/provisioning/puppet_apply.html) remember the script that we put in the Userdata of the very first example. We are going to use the same Puppet configuration but via Vagrant.
 
 Edit the `Vagrantfile` to have:
 
@@ -383,11 +383,11 @@ Now simply clone the repository that we used earlier:
     git clone https://github.com/retrack/exoscale-wordpress
 
 You should now see the `modules` and `manifests` directory in the root of your working directory that contains the `Vagrantfile`.
-Remove the shell provisioning step and start the instance like before:
+Remove the shell provisioning step, make sure to use the Ubuntu 12.04 template id and start the instance like before:
 
     vagrant up --provider=cloudstack
 
-Open your browser and get back to Wordpress !
+Open your browser and get back to Wordpress ! Of course the whole idea of Vagrant is that you can test all of these provisioning steps on your local machines using VirtualBox. Once you are happy with your recipes you can then move to provision in the cloud. Check out [Packer](http://packer.io) a related project which you can use to generate images for your cloud.
 
 Playing with multi-machines configuration
 -----------------------------------------
@@ -410,6 +410,9 @@ Ansible
 =======
 
 Our last exercise for this tutorial will be an introduction to [Ansible](http://ansibleworks.com). Ansible is a new configuration management systems based on ssh communications with the instances and a no-server setup. It is easy to install and get [started](http://docs.ansible.com/intro.html). Of course it can be used in conjunction with Vagrant.
+
+Install and remote execution
+----------------------------
 
 First install *ansible*:
     
@@ -448,3 +451,38 @@ And see how you can use Ansible as a remote execution framework:
     hello
 
 Now check all the great Ansible [examples](https://github.com/ansible/ansible-examples), pick one, download it via github and try to configure your instances with `ansible-playbook`
+
+Provisioning with Playbooks
+----------------------------
+
+Clone the `ansible-examples` outside your Vagrant project:
+
+    cd ..
+    git clone https://github.com/ansible/ansible-examples.git
+
+Pick the one you want to try, go easy first :) Maybe wordpress or a lamp stack and copy it's content to a `ansible` directory within the root of the Vagrant project.
+
+    cd ./tutorial
+    mkdir ansible
+    cd ansible
+    cp -R ../../ansible-examples/wordpress-nginx/ .
+
+Go back to the Vagrant project directory we have been working on and edit the `Vagrantfile`. Remove the Puppet provisioning or comment it out and add:
+
+    # Ansible test
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "ansible/site.yml"
+      ansible.verbose = "vvvv"
+      ansible.host_key_checking = "false"
+      ansible.sudo_user = "root"
+    end
+
+And start the instance once again
+
+    vagrant up --provision=cloudstack
+
+Watch the output from the Ansible provisioning and once finished access the wordpress application that was just configured.
+
+
+
+
