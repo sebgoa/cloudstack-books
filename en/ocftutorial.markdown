@@ -65,7 +65,7 @@ CloudMonkey, an interactive shell to your cloud
 The exoscale cloud is based on CloudStack. It exposes the CloudStack native API. Let's use CloudMonkey, the ACS cli.
  
     pip install cloudmonkey
-    cloumonkey
+    cloudmonkey
  
 The full documentation for cloudmonkey is on the [wiki](https://cwiki.apache.org/confluence/display/CLOUDSTACK/CloudStack+cloudmonkey+CLI)
  
