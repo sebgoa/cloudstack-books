@@ -91,14 +91,14 @@ will have the same sequence of field filters provided
 To enable it, use the *set* function and create filters like so:
 
     > set display table
-    > list users filter=id,domain,account
+    > list zones filter=name,id
     count = 1
-    user:
-    +--------------------------------------+--------+---------+
-    |                  id                  | domain | account |
-    +--------------------------------------+--------+---------+
-    | 7ed6d5da-93b2-4545-a502-23d20b48ef2a |  ROOT  |  admin  |
-    +--------------------------------------+--------+---------+
+    zone:
+    +--------+--------------------------------------+
+    |  name  |                  id                  |
+    +--------+--------------------------------------+
+    | CH-GV2 | 1128bd56-b4d9-4ac6-a7b9-c715b187ce11 |
+    +--------+--------------------------------------+
         
 Starting a Virtual Machine instance with CloudMonkey
 ----------------------------------------------------
@@ -114,60 +114,86 @@ The required arguments are *serviceofferingid, templateid and zoneid*
 In order to specify the template that we want to use, we can list all
 available templates with the following call:
 
-    cloudmonkey>list templates templatefilter=all
-    count = 2
+     > list templates filter=id,displaytext templatefilter=executable
+    count = 36
     template:
-    ========
-    domain = ROOT
-    domainid = 8a111e58-e155-4482-93ce-84efff3c7c77
-    zoneid = e1bfdfaf-3d9b-43d4-9aea-2c9f173a1ae7
-    displaytext = SystemVM Template (XenServer)
-    ostypeid = 849d7d0a-9fbe-452a-85aa-70e0a0cbc688
-    passwordenabled = False
-    id = 6d360f79-4de9-468c-82f8-a348135d298e
-    size = 2101252608
-    isready = True
-    templatetype = SYSTEM
-    zonename = devcloud
+    +--------------------------------------+------------------------------------------+
+    |                  id                  |               displaytext                |
+    +--------------------------------------+------------------------------------------+
+    | 3235e860-2f00-416a-9fac-79a03679ffd8 | Windows Server 2012 R2 WINRM 100GB Disk  |
+    | 20d4ebc3-8898-431c-939e-adbcf203acec |   Linux Ubuntu 13.10 64-bit 10 GB Disk   |
+    | 70d31a38-c030-490b-bca9-b9383895ade7 |   Linux Ubuntu 13.10 64-bit 50 GB Disk   |
+    | 4822b64b-418f-4d6b-b64e-1517bb862511 |  Linux Ubuntu 13.10 64-bit 100 GB Disk   |
+    | 39bc3611-5aea-4c83-a29a-7455298241a7 |  Linux Ubuntu 13.10 64-bit 200 GB Disk   |
     ...<snipped>
-
-In this snippet, I used DevCloud and only showed the beginning output of the first template, the SystemVM template
 
 Similarly to get the *serviceofferingid* you would do:
 
-    cloudmonkey>list serviceofferings | grep id
-    id = ef2537ad-c70f-11e1-821b-0800277e749c
-    id = c66c2557-12a7-4b32-94f4-48837da3fa84
-    id = 3d8b82e5-d8e7-48d5-a554-cf853111bc50
+    > list serviceofferings filter=id,name
+    count = 7
+    serviceoffering:
+    +--------------------------------------+-------------+
+    |                  id                  |     name    |
+    +--------------------------------------+-------------+
+    | 71004023-bb72-4a97-b1e9-bc66dfce9470 |    Micro    |
+    | b6cd1ff5-3a2f-4e9d-a4d1-8988c1191fe8 |     Tiny    |
+    | 21624abb-764e-4def-81d7-9fc54b5957fb |    Small    |
+    | b6e9d1e8-89fc-4db3-aaa4-9b4c5b1d0844 |    Medium   |
+    | c6f99499-7f59-4138-9427-a09db13af2bc |    Large    |
+    | 350dc5ea-fe6d-42ba-b6c0-efb8b75617ad | Extra-large |
+    | a216b0d1-370f-4e21-a0eb-3dfc6302b564 |     Huge    |
+    +--------------------------------------+-------------+
 
 Note that we can use the linux pipe as well as standard linux commands
 within the interactive shell. Finally we would start an instance with
 the following call:
 
-    cloudmonkey>deploy virtualmachine templateid=13ccff62-132b-4caf-b456-e8ef20cbff0e zoneid=e1bfdfaf-3d9b-43d4-9aea-2c9f173a1ae7 serviceofferingid=ef2537ad-c70f-11e1-821b-0800277e749c
-    jobprocstatus = 0
-    created = 2013-03-05T13:04:51-0800
+    cloudmonkey>deploy virtualmachine templateid=20d4ebc3-8898-431c-939e-adbcf203acec zoneid=1128bd56-b4d9-4ac6-a7b9-c715b187ce11 serviceofferingid=71004023-bb72-4a97-b1e9-bc66dfce9470
+    id = 5566c27c-e31c-438e-9d97-c5d5904453dc
+    jobid = 334fbc33-c720-46ba-a710-182af31e76df
+
+This is an asynchronous job, therefore it returns a `jobid`, you can query the state of this job with:
+
+    > query asyncjobresult jobid=334fbc33-c720-46ba-a710-182af31e76df
+    accountid = b8c0baab-18a1-44c0-ab67-e24049212925
     cmd = com.cloud.api.commands.DeployVMCmd
-    userid = 7ed6d5da-93b2-4545-a502-23d20b48ef2a
-    jobstatus = 1
-    jobid = c441d894-e116-402d-aa36-fdb45adb16b7
+    created = 2014-03-05T13:40:18+0100
+    jobid = 334fbc33-c720-46ba-a710-182af31e76df
+    jobinstanceid = 5566c27c-e31c-438e-9d97-c5d5904453dc
+    jobinstancetype = VirtualMachine
+    jobprocstatus = 0
     jobresultcode = 0
-    jobresulttype = object
-    jobresult:
-    =========
+    jobstatus = 0
+    userid = 968f6b4e-b382-4802-afea-dd731d4cf9b9
+
+Once the machine is started you can list it:
+
+    > list virtualmachines filter=id,displayname
+    count = 1
     virtualmachine:
-    ==============
-    domain = ROOT
-    domainid = 8a111e58-e155-4482-93ce-84efff3c7c77
-    haenable = False
-    templatename = tiny Linux
-    ...<snipped>
+    +--------------------------------------+--------------------------------------+
+    |                  id                  |             displayname              |
+    +--------------------------------------+--------------------------------------+
+    | 5566c27c-e31c-438e-9d97-c5d5904453dc | 5566c27c-e31c-438e-9d97-c5d5904453dc |
+    +--------------------------------------+--------------------------------------+
 
 The instance would be stopped with:
 
-    cloudmonkey>stop virtualmachine id=7efe0377-4102-4193-bff8-c706909cc2d2
+    > stop virtualmachine id=5566c27c-e31c-438e-9d97-c5d5904453dc
+    jobid = 391b4666-293c-442b-8a16-aeb64eef0246
+
+    > list virtualmachines filter=id,displayname,state
+    count = 1
+    virtualmachine:
+    +--------------------------------------+--------------------------------------+---------+
+    |                  id                  |             displayname              |  state  |
+    +--------------------------------------+--------------------------------------+---------+
+    | 5566c27c-e31c-438e-9d97-c5d5904453dc | 5566c27c-e31c-438e-9d97-c5d5904453dc | Stopped |
+    +--------------------------------------+--------------------------------------+---------+
         
 The *ids* that you will use will differ from this example. Make sure you use the ones that corresponds to your CloudStack cloud.
+
+Try to create a `sshkeypair` with `create sshkeypair`, a `securitygroup` with `create securitygroup` and add some rules to it.
 
 With CloudMonkey all CloudStack APIs are available.
 
@@ -200,7 +226,7 @@ driver.
 
 Then, using your keys and endpoint, create a connection object. Note
 that this is a local test and thus not secured. If you use a CloudStack
-public cloud, make sure to use SSL properly (i.e `secure=True`).
+public cloud, make sure to use SSL properly (i.e `secure=True`). Replace the host and path with the ones of your public cloud. For exoscale use `host='http://api.exoscale.ch` and `path=/compute`
 
     >>> apikey='plgWJfZK4gyS3mlZLYq_u38zCm0bewzGUdP66mg'
     >>> secretkey='VDaACYb0LV9eNjeq1EhwJaw7FF3akA3KBQ'
